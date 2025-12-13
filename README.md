@@ -32,10 +32,11 @@ kot-cloud/
 ├── build.gradle.kts                          # 根项目构建配置
 ├── settings.gradle.kts                       # 模块声明
 ├── gradle.properties                         # 全局属性
-├── gradlew / gradlew.bat                     # Gradle wrapper
-├── kot-framework/                            # 🎯 框架父模块（纯容器）
+├── gradlew
+├── gradlew.bat                               # Gradle wrapper
+├── kot-framework                             # 🎯 框架父模块（纯容器）
 │   ├── build.gradle.kts                      # 父模块配置（无 application）
-│   ├── kot-framework-common/                 # ⭐ 通用工具模块
+│   ├── kot-common/                           # ⭐ 通用工具模块
 │   │   ├── build.gradle.kts
 │   │   └── src/
 │   │       └── main/
@@ -101,7 +102,7 @@ kot-cloud/
 │                       └── routing/
 │                           ├── RoutePrefix.kt             # 路由前缀注解
 │                           └── RoutingExtensions.kt       # 路由扩展
-├── service-admin/                            # 🚀 管理端微服务
+├── kot-system/                            # 🚀 管理端微服务
 │   ├── build.gradle.kts
 │   └── src/
 │       └── main/
@@ -114,20 +115,6 @@ kot-cloud/
 │                   ├── service/              # 业务逻辑
 │                   ├── repository/           # 数据访问
 │                   └── model/                # 数据模型
-├── service-user/                             # 🚀 用户端微服务
-│   ├── build.gradle.kts
-│   └── src/
-│       └── main/
-│           └── kotlin/
-│               └── com/whitesprite/dev/user/
-│                   ├── Application.kt        # 主入口
-│                   ├── routes/               # 路由（自动添加 /user 前缀）
-│                   │   ├── ProfileRoutes.kt
-│                   │   └── OrderRoutes.kt
-│                   ├── service/
-│                   ├── repository/
-│                   └── model/
-└── service-gateway/                          # 🚀 API 网关（可选）
-├── build.gradle.kts
-└── src/
+├── service-gateway/                          # 🚀 API 网关（可选）
+└── build.gradle.kts
 ```
