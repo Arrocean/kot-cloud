@@ -1,0 +1,30 @@
+[versions]
+ktor = "3.3.3"
+micrometer = "1.14.0"
+exposed = "1.0.0-rc-4"
+koin = "4.1.1"
+logback = "1.5.22"
+
+[libraries]
+# Ktor核心
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+
+# 数据库
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time", version.ref = "exposed" }
+
+# 监控
+micrometer-core = { group = "io.micrometer", name = "micrometer-core", version.ref = "micrometer" }
+micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus", version.ref = "micrometer" }
+
+# 依赖注入
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin" }
+
+# 日志
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
