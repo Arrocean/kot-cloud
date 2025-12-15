@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.2.21"
+    kotlin("jvm") version "2.2.21"
 }
 
 group = "com.whitesprite.dev"
@@ -10,5 +10,4 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.logback.classic)
 }
