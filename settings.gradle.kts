@@ -1,7 +1,10 @@
 rootProject.name = "kot-cloud"
 
 // Framework modules
-include(":kot-framework")
+include(
+    ":kot-framework",
+    ":kot-framework:kot-common-api"
+)
 //include(":service-hello")
 
 pluginManagement {
@@ -9,4 +12,3 @@ pluginManagement {
         maven("https://mirrors.huaweicloud.com/repository/maven/")
     }
 }
-include("kot-framework")

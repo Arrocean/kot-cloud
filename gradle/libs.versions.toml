@@ -4,6 +4,7 @@ micrometer = "1.14.0"
 exposed = "1.0.0-rc-4"
 koin = "4.1.1"
 logback = "1.5.22"
+micronaut = "4.10.4"
 
 [libraries]
 # Ktor核心
@@ -28,3 +29,7 @@ koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin"
 
 # 日志
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+
+# Micronaut 框架
+micronaut-http-client = { group = "io.micronaut", name = "micronaut-http-client", version.ref = "micronaut" }
+micronaut-http-http-annotation = { group = "io.micronaut", name = "micronaut-http-annotation", version.ref = "micronaut" }

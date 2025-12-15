@@ -10,5 +10,5 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation(libs.logback.classic)
 }
