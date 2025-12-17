@@ -7,6 +7,11 @@ include(
     ":kot-framework:kot-common-model",
     ":kot-framework:kot-web"
 )
+include(
+    ":kot-module-system",
+    ":kot-module-system:kot-module-system-api",
+    ":kot-module-system:kot-module-system-server"
+)
 //include(":service-hello")
 
 pluginManagement {
