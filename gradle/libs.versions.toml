@@ -33,5 +33,10 @@ koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin"
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
 # Micronaut 框架
+micronaut-core = { group = "io.micronaut", name = "micronaut-core", version.ref = "micronaut" }
 micronaut-http-client = { group = "io.micronaut", name = "micronaut-http-client", version.ref = "micronaut" }
 micronaut-http = { group = "io.micronaut", name = "micronaut-http", version.ref = "micronaut" }
+micronaut-logging = { group = "io.micronaut", name = "micronaut-logging", version.ref = "micronaut" }
+micronaut-validation = { group = "io.micronaut.validation", name = "micronaut-validation", version.ref = "micronaut" }
+micronaut-validation-annotations = { group = "io.micronaut.validation", name = "micronaut-validation-annotations", version.ref = "micronaut" }
+micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version.ref = "micronaut" }
