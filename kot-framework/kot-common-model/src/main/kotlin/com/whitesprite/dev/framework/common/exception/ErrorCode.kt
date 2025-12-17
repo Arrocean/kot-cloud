@@ -3,11 +3,11 @@ package com.whitesprite.dev.framework.common.exception
 /**
  * 错误码类
  *
- * @param code 错误码
- * @param msg 错误信息
+ * @property code 错误码
+ * @property msg 错误信息
  * @author WhiteSprite
  */
-class ErrorCode(
+data class ErrorCode(
     /**
      * 错误码
      *

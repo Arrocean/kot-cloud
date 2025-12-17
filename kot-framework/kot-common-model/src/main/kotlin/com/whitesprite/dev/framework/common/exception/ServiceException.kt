@@ -3,8 +3,8 @@ package com.whitesprite.dev.framework.common.exception
 /**
  * 服务异常类
  *
- * @param code 错误码
- * @param message 错误信息
+ * @property code 错误码
+ * @property message 错误信息
  * @author WhiteSprite
  */
 class ServiceException(
