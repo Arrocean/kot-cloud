@@ -34,3 +34,6 @@ target/*
 
 ## Build
 build/
+
+## claude code
+*.claude

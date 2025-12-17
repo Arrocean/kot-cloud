@@ -4,7 +4,8 @@ micrometer = "1.14.0"
 exposed = "1.0.0-rc-4"
 koin = "4.1.1"
 logback = "1.5.22"
-micronaut = "4.10.4"
+# TODO WhiteSprite：鉴于 micronaut 即将发布5.0.0版本，暂不使用 Micronaut 5.0 的不稳定版本
+micronaut = "4.10.10"
 koter = "0.0.1"
 
 [libraries]
@@ -33,4 +34,4 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 
 # Micronaut 框架
 micronaut-http-client = { group = "io.micronaut", name = "micronaut-http-client", version.ref = "micronaut" }
-micronaut-http-annotation = { group = "io.micronaut", name = "micronaut-http-annotation", version.ref = "micronaut" }
+micronaut-http = { group = "io.micronaut", name = "micronaut-http", version.ref = "micronaut" }
