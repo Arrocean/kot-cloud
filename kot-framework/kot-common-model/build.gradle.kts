@@ -17,6 +17,9 @@ group = "com.whitesprite.dev"
 
 dependencies {
     // Micronaut
+    api(libs.micronaut.core)
+    api(libs.micronaut.validation)
+    api(libs.micronaut.validation.annotations)
     implementation(libs.micronaut.http.client)
     implementation(libs.micronaut.http)
 }
