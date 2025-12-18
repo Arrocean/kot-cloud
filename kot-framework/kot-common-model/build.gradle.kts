@@ -11,4 +11,5 @@ dependencies {
     implementation(libs.micronaut.core)
     implementation(libs.micronaut.http.client)
     implementation(libs.micronaut.http)
+    implementation(libs.micronaut.context)
 }

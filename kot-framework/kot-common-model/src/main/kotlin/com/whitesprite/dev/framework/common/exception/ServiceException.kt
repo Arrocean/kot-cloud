@@ -7,7 +7,7 @@ package com.whitesprite.dev.framework.common.exception
  * @property message 错误信息
  * @author WhiteSprite
  */
-class ServiceException(
+data class ServiceException(
     /**
      * 错误码
      */

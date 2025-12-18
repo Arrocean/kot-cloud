@@ -1,14 +1,45 @@
 package com.whitesprite.dev.framework.common.poko
 
-import jakarta.validation.constraints.Max
+import com.whitesprite.dev.framework.common.validation.PageSizeOrNoPage
+import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 
+/**
+ * 分页参数
+ * @property pageNo 页码
+ * @property pageSize 页大小
+ * @author WhiteSprite
+ */
 data class PageParam(
-    // TODO WhiteSprite：需要考虑怎么取消魔法值；
-    @field:Min(value = 1) val pageNo: Int = 1,
-    // TODO WhiteSprite：需要考虑怎么取消魔法值；需要考虑为-1情况下的查询所有数据处理
-    @field:Min(value = 1) @field:Max(value = 200) val pageSize: Int = 10
-)
+    @field:Min(value = 1L)
+    val pageNo: Int = DEFAULT_PAGE_NO,
+
+    @field:Min(value = 1L)
+    @field:PageSizeOrNoPage(max = MAX_PAGE_SIZE)
+    val pageSize: Int = DEFAULT_PAGE_SIZE
+) {
+    companion object {
+        /**
+         * 默认页码
+         */
+        const val DEFAULT_PAGE_NO = 1
+
+        /**
+         * 默认页大小
+         */
+        const val DEFAULT_PAGE_SIZE = 10
+
+        /**
+         * 最大页大小
+         */
+        const val MAX_PAGE_SIZE = 200
+
+        /**
+         * 每页条数 不分页值
+         */
+        const val NO_PAGE = -1
+    }
+}
 
 data class SortingField(
     val field: String,
@@ -20,15 +51,21 @@ enum class SortDirection {
     DESC
 }
 
+/**
+ * 支持排序的分页参数
+ */
 data class SortablePageParam(
-    val page: Int = 1,
-    val size: Int = 10,
+    @field:Valid
+    val page: PageParam = PageParam(),
+
     val sorting: List<SortingField> = emptyList()
-)
+) {
+    /** 便捷访问（不参与序列化，必要时可 @JsonIgnore） */
+    val pageNo: Int get() = page.pageNo
+    val pageSize: Int get() = page.pageSize
+}
 
 data class PageResult<T>(
-    val page: Int,
-    val size: Int,
     val total: Long,
     val records: List<T>
 )
