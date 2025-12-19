@@ -9,6 +9,13 @@ include(
     ":kot-framework:kot-common-model",
     ":kot-framework:kot-web"
 )
+// Gateway modules
+include(
+    ":kot-gateway",
+//    ":kot-module-gateway:kot-module-gateway-api",
+//    ":kot-module-gateway:kot-module-gateway-server"
+)
+// Module System sub-modules
 include(
     ":kot-module-system",
     ":kot-module-system:kot-module-system-api",
