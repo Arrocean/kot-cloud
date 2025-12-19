@@ -1,6 +1,6 @@
 package com.whitesprite.dev.framework.common.exception.util
 
-import com.sun.org.slf4j.internal.LoggerFactory
+import org.slf4j.LoggerFactory
 import com.whitesprite.dev.framework.common.exception.ErrorCode
 import com.whitesprite.dev.framework.common.exception.ServiceException
 import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
