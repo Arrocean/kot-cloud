@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.3.0"
-//    kotlin("kapt")
+    kotlin("jvm")
+    id("com.google.devtools.ksp")
 }
 
 group = "com.whitesprite.dev"
@@ -13,8 +13,14 @@ dependencies {
     implementation(libs.micronaut.http.server.netty)
     // Micronaut Data Processor
 //    kapt(libs.micronaut.data.processor)
+    ksp(libs.micronaut.inject)
 
     /* ============= 业务模块 ============= */
     // System 模块
     implementation(project(":kot-module-system:kot-module-system-server"))
+}
+
+ksp {
+    arg("micronaut.processing.incremental", "true")
+    arg("micronaut.processing.annotations", "com.whitesprite.dev.*")
 }

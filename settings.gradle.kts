@@ -28,8 +28,14 @@ include(":kot-server")
 
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         maven("https://mirrors.huaweicloud.com/repository/maven/")
         mavenCentral()
         google()
+    }
+    plugins {
+        kotlin("jvm") version "2.3.0"
+        kotlin("kapt") version "2.3.0"
+        id("com.google.devtools.ksp") version "2.3.4"
     }
 }
