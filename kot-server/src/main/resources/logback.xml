@@ -1,0 +1,61 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- ========= 通用属性 ========= -->
+
+    <!-- 你可以用 -DLOG_FILE=... 或环境变量 LOG_FILE 覆盖 -->
+    <property name="APP_NAME" value="${APP_NAME:-kot-server}" />
+    <property name="LOG_DIR" value="${LOG_DIR:-${user.home}/logs}" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_DIR}/${APP_NAME}.log}" />
+
+    <!-- 参考 Spring Boot 的思路：控制台更“花”，文件更“素” -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{50}:%L) - %msg%n" />
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}:%L - %msg%n" />
+
+    <!-- ========= 控制台输出 ========= -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- ========= 文件输出（滚动：按天 + 按大小） ========= -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 例如：~/logs/kot-server.log.2025-12-21.0.log -->
+            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>10MB</maxFileSize>
+            <!-- 可选：限制总占用空间 -->
+            <!-- <totalSizeCap>2GB</totalSizeCap> -->
+        </rollingPolicy>
+    </appender>
+
+    <!-- ========= 异步写文件（提升性能） ========= -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢日志：0 表示不丢弃 INFO/DEBUG 等 -->
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>512</queueSize>
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <!-- ========= 日志级别（Micronaut/Netty 常用） ========= -->
+    <!-- 你可以按需调整： -->
+    <logger name="io.micronaut" level="INFO" />
+    <logger name="io.netty" level="INFO" />
+    <!-- 你的业务包（示例） -->
+    <logger name="com.whitesprite.dev" level="DEBUG" />
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ASYNC" />
+    </root>
+</configuration>

@@ -1,0 +1,15 @@
+micronaut:
+  server:
+    port: 8002
+
+datasources:
+  default:
+    url: jdbc:postgresql://49.234.26.157:5432/kot_cloud
+    username: user_rmtxsa
+    password: 20011223
+    maximumPoolSize: 5
+
+logger:
+  levels:
+    root: DEBUG
+    com.whitesprite.dev.module.system: DEBUG

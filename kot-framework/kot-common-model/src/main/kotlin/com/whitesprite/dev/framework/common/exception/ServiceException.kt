@@ -1,0 +1,19 @@
+package com.whitesprite.dev.framework.common.exception
+
+/**
+ * 服务异常类
+ *
+ * @property code 错误码
+ * @property message 错误信息
+ * @author WhiteSprite
+ */
+data class ServiceException(
+    /**
+     * 错误码
+     */
+    val code: Int,
+    /**
+     * 错误信息
+     */
+    override val message: String
+) : RuntimeException(message)
