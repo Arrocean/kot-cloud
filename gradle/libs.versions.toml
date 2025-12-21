@@ -8,7 +8,7 @@ koter = "0.0.1"
 
 # Micronaut 相关版本
 # TODO WhiteSprite：鉴于 micronaut 即将发布5.0.0版本，暂不使用 Micronaut 5.0 的不稳定版本
-micronaut = "4.10.11"
+micronaut = "4.10.12"
 micronaut-validation = "4.12.0"
 micronaut-data  = "4.14.2"
 micronaut-jdbc = "7.0.0"
@@ -42,8 +42,10 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 
 # Micronaut 框架
 micronaut-core = { group = "io.micronaut", name = "micronaut-core", version.ref = "micronaut" }
+micronaut-runtime = { group = "io.micronaut", name = "micronaut-runtime", version.ref = "micronaut" }
 micronaut-http-client = { group = "io.micronaut", name = "micronaut-http-client", version.ref = "micronaut" }
 micronaut-http = { group = "io.micronaut", name = "micronaut-http", version.ref = "micronaut" }
+micronaut-http-server-netty = { group = "io.micronaut", name = "micronaut-http-server-netty", version.ref = "micronaut" }
 micronaut-logging = { group = "io.micronaut", name = "micronaut-logging", version.ref = "micronaut" }
 micronaut-context = { group = "io.micronaut", name = "micronaut-context", version.ref = "micronaut" }
 micronaut-validation = { group = "io.micronaut.validation", name = "micronaut-validation", version.ref = "micronaut-validation" }
