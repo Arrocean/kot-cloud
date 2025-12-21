@@ -11,5 +11,5 @@ datasources:
 
 logger:
   levels:
-    root: INFO
+    root: DEBUG
     com.whitesprite.dev.module.system: DEBUG

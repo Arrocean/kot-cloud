@@ -25,11 +25,3 @@ datasources:
     maximumPoolSize: 10
     minimumIdle: 1
     autoCommit: true
-
-# Micronaut Data 基础配置（偏通用）
-
-# 日志（开发期建议更详细；生产可把 root 调回 INFO）
-logger:
-  levels:
-    root: INFO
-    com.whitesprite.dev.module.system: DEBUG

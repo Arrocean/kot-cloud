@@ -32,6 +32,9 @@ target/*
 ## Gradle ##
 .gradle
 
+## Kotlin ##
+out/
+
 ## Build
 build/
 
