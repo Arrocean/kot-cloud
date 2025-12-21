@@ -1,6 +1,4 @@
-plugins {
-    kotlin("jvm")
-}
+plugins {}
 
 group = "com.whitesprite.dev"
 version = "0.0.1"
