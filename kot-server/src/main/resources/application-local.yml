@@ -4,9 +4,9 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:postgresql://49.234.26.157:5432/kot_cloud
-    username: user_rmtxsa
-    password: 20011223
+    url: jdbc:postgresql://localhost:5432/kot_cloud
+    username: root
+    password: 123456
     maximumPoolSize: 5
 
 logger:
