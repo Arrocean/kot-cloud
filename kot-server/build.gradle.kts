@@ -14,6 +14,11 @@ dependencies {
     // Micronaut Data Processor
 //    kapt(libs.micronaut.data.processor)
     ksp(libs.micronaut.inject)
+    // SLF4J 相关
+    runtimeOnly(libs.logback.classic)
+    // Micronaut Jackson
+    implementation(libs.micronaut.jackson)
+    implementation(libs.micronaut.jackson.databind)
 
     /* ============= 业务模块 ============= */
     // System 模块

@@ -52,6 +52,10 @@ dependencies {
     // Micronaut Data Processor
     kapt(libs.micronaut.data.processor)
 
+    // Micronaut Jackson
+    api(libs.micronaut.jackson)
+    api(libs.micronaut.jackson.databind)
+
     // JDBC
     api(libs.micronaut.jdbc.hikari)
 

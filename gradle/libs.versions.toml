@@ -5,6 +5,7 @@ exposed = "1.0.0-rc-4"
 koin = "4.1.1"
 logback = "1.5.22"
 koter = "0.0.1"
+jackson = "3.0.3"
 
 # Micronaut 相关版本
 # TODO WhiteSprite：鉴于 micronaut 即将发布5.0.0版本，暂不使用 Micronaut 5.0 的不稳定版本
@@ -12,6 +13,7 @@ micronaut = "4.10.12"
 micronaut-validation = "4.12.0"
 micronaut-data  = "4.14.2"
 micronaut-jdbc = "7.0.0"
+micronaut-serde = "2.16.2"
 
 # DB
 postgre = "42.7.8"
@@ -52,6 +54,10 @@ micronaut-context = { group = "io.micronaut", name = "micronaut-context", versio
 micronaut-validation = { group = "io.micronaut.validation", name = "micronaut-validation", version.ref = "micronaut-validation" }
 micronaut-validation-annotations = { group = "io.micronaut.validation", name = "micronaut-validation-annotations", version.ref = "micronaut" }
 micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version.ref = "micronaut" }
+micronaut-jackson-databind = { group = "io.micronaut", name = "micronaut-jackson-databind", version.ref = "micronaut" }
+
+# Micronaut Serde
+micronaut-jackson = { group = "io.micronaut.serde", name = "micronaut-serde-jackson", version.ref = "micronaut-serde" }
 
 # Micronaut Data 框架
 micronaut-data-runtime = { group = "io.micronaut.data", name = "micronaut-data-runtime", version.ref = "micronaut-data" }
@@ -65,4 +71,5 @@ micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hik
 
 # PostgreSQL 驱动
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgre" }
+
 
