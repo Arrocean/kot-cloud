@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.3.0"
+//    kotlin("kapt")
 }
 
 group = "com.whitesprite.dev"
@@ -10,6 +11,8 @@ dependencies {
     implementation(libs.micronaut.runtime)
     // Micronaut HTTP
     implementation(libs.micronaut.http.server.netty)
+    // Micronaut Data Processor
+//    kapt(libs.micronaut.data.processor)
 
     /* ============= 业务模块 ============= */
     // System 模块
