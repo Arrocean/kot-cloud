@@ -21,6 +21,9 @@ include(
     ":kot-module-system:kot-module-system-api",
     ":kot-module-system:kot-module-system-server"
 )
+// Main Entry
+include(":kot-server")
+
 //include(":service-hello")
 
 pluginManagement {
