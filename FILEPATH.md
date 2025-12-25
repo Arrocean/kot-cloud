@@ -94,7 +94,7 @@ kot-cloud/
 │   │                                           ├── package.kt
 │   │                                           └── dto/
 │   │                                               └── UserDTO.kt  # AdminUserDTO
-│   └── kot-module-system-server/                     # 🚀 模块服务实现层（Controller/Service/Repository/Entity）
+│   └── kot-module-system-server/                     # 🚀 模块服务实现层（DDD 架构）
 │       ├── build.gradle.kts
 │       └── src/
 │           └── main/
@@ -104,32 +104,65 @@ kot-cloud/
 │               │           └── dev/
 │               │               └── module/
 │               │                   └── system/
-│               │                       ├── SystemServerApplication.kt    # 模块独立启动入口
-│               │                       ├── controller/
-│               │                       │   └── admin/
-│               │                       │       ├── auth/
-│               │                       │       │   └── package.kt
-│               │                       │       └── user/
-│               │                       │           ├── AdminUserController.kt
-│               │                       │           └── vo/
-│               │                       │               └── AdminUserVO.kt
-│               │                       ├── service/
-│               │                       │   ├── auth/
+│               │                       ├── SystemServerApplication.kt   # 模块独立启动入口
+│               │                       ├── adapter/                     # 🔌 适配层（Web / 外部接口）
+│               │                       │   └── web/
+│               │                       │       ├── admin/
+│               │                       │       │   ├── tenant/
+│               │                       │       │   │   └── package.kt
+│               │                       │       │   └── user/
+│               │                       │       │       ├── AdminUserController.kt
+│               │                       │       │       ├── AdminUserAssembler.kt
+│               │                       │       │       └── AdminUserModels.kt
+│               │                       │       └── app/
+│               │                       │           ├── dict/
+│               │                       │           │   └── package.kt
+│               │                       │           └── ip/
+│               │                       │               └── package.kt
+│               │                       ├── application/                 # 🧠 应用层（Use Case）
+│               │                       │   ├── tenant/
 │               │                       │   │   └── package.kt
 │               │                       │   └── user/
-│               │                       │       ├── AdminUserService.kt
-│               │                       │       └── AdminUserServiceImpl.kt
-│               │                       └── persistence/
-│               │                           ├── entity/
-│               │                           │   ├── tenant/
-│               │                           │   │   └── package.kt
-│               │                           │   └── user/
-│               │                           │       └── AdminUserEntity.kt
-│               │                           └── mariadb/
-│               │                               ├── tenant/
-│               │                               │   └── package.kt
-│               │                               └── user/
-│               │                                   └── AdminUserRepository.kt
+│               │                       │       ├── command/
+│               │                       │       │   └── package.kt
+│               │                       │       ├── query/
+│               │                       │       │   └── package.kt
+│               │                       │       └── AdminUserAppService.kt
+│               │                       ├── domain/                      # 🧱 领域层（纯业务模型）
+│               │                       │   ├── tenant/
+│               │                       │   │   └── package.kt
+│               │                       │   └── user/
+│               │                       │       ├── gateway/
+│               │                       │       │   └── AdminUserGateway.kt
+│               │                       │       ├── model/
+│               │                       │       │   └── AdminUser.kt
+│               │                       │       └── value/
+│               │                       │           └── package.kt
+│               │                       └── infrastructure/              # 🏗 基础设施层
+│               │                           └── persistence/
+│               │                               ├── entity/
+│               │                               │   ├── tenant/
+│               │                               │   │   └── package.kt
+│               │                               │   └── user/
+│               │                               │       └── AdminUserEntity.kt
+│               │                               │
+│               │                               ├── gatewayimpl/
+│               │                               │   ├── mariadb/
+│               │                               │   │   └── package.kt
+│               │                               │   └── postgresql/
+│               │                               │       └── AdminUserGatewayPgImpl.kt
+│               │                               │
+│               │                               ├── mapper/
+│               │                               │   ├── tenant/
+│               │                               │   │   └── package.kt
+│               │                               │   └── user/
+│               │                               │       └── AdminUserMapper.kt
+│               │                               │
+│               │                               └── postgresql/
+│               │                                   ├── tenant/
+│               │                                   │   └── package.kt
+│               │                                   └── user/
+│               │                                       └── AdminUserRepository.kt
 │               └── resources/
 │                   ├── application.yml               # 默认配置（端口/数据源占位/日志等）
 │                   └── application-local.yml         # 本地环境配置（端口/本地数据源等）
