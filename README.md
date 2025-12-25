@@ -31,8 +31,8 @@
 - [Exposed](https://github.com/JetBrains/Exposed) - 用于关系型数据库访问，提供类型安全的 SQL 构建器
 
 **数据库**:
-
-- [MariaDB](https://mariadb.org/) - 用于关系型数据库
+- [PostgreSQL](https://www.postgresql.org/) - 用于关系型数据库
+- [MariaDB](https://mariadb.org/) - 用于关系型数据库(后续支持)
 
 
 #### 安装教程
