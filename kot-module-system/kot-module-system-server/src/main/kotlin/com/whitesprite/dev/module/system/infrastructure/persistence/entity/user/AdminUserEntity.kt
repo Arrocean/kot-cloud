@@ -1,7 +1,5 @@
 package com.whitesprite.dev.module.system.infrastructure.persistence.entity.user
 
-import com.whitesprite.dev.module.system.api.user.dto.AdminUserDto
-import com.whitesprite.dev.module.system.domain.user.model.AdminUser
 import java.time.LocalDateTime
 
 /**
@@ -64,39 +62,3 @@ data class AdminUserEntity(
     val deleted: Boolean
 ) {
 }
-
-/**
- * 转换为 DTO
- *
- * @return AdminUserDTO
- */
-fun AdminUserEntity.toDTO(): AdminUserDto = AdminUserDto(
-    id = id,
-    username = username,
-    password = password,
-    nickname = nickname,
-    remark = remark,
-    creator = creator,
-    createTime = createTime,
-    updater = updater,
-    updateTime = updateTime,
-    deleted = deleted
-)
-
-/**
- * 转换为 Domain 模型
- *
- * @return AdminUser
- */
-fun AdminUserEntity.toDomain(): AdminUser = AdminUser(
-    id = id,
-    username = username,
-    password = password,
-    nickname = nickname,
-    remark = remark,
-    creator = creator,
-    createTime = createTime,
-    updater = updater,
-    updateTime = updateTime,
-    deleted = deleted
-)

@@ -7,11 +7,10 @@ import com.whitesprite.dev.module.system.api.user.dto.AdminUserDto
 import com.whitesprite.dev.module.system.domain.user.gateway.AdminUserGateway
 import com.whitesprite.dev.module.system.domain.user.model.AdminUser
 import com.whitesprite.dev.module.system.infrastructure.persistence.entity.user.AdminUserEntity
-import com.whitesprite.dev.module.system.infrastructure.persistence.entity.user.toDTO
-import com.whitesprite.dev.module.system.infrastructure.persistence.entity.user.toDomain
-import com.whitesprite.dev.module.system.infrastructure.persistence.postgresql.user.AdminUserRepository
+import com.whitesprite.dev.module.system.infrastructure.persistence.mapper.user.AdminUserMapper
 import jakarta.inject.Singleton
 import java.time.LocalDateTime
+
 
 /**
  * 用户服务实现
@@ -70,7 +69,7 @@ open class AdminUserAppService(
             NoSuchElementException("用户不存在: $id")
         }
         val updated = entity.copy(username = req.name)
-        return adminUserGateway.update(updated).toDomain()
+        return AdminUserMapper.toDomain(adminUserGateway.update(updated))
     }
 
     /**
@@ -80,7 +79,7 @@ open class AdminUserAppService(
      */
     fun getById(id: Long): AdminUser? {
         val entity = adminUserGateway.findById(id).orElse(null) ?: return null
-        return entity.toDomain()
+        return AdminUserMapper.toDomain(entity)
     }
 
     /**
@@ -96,7 +95,7 @@ open class AdminUserAppService(
             adminUserGateway.findByNicknameIlike("%$keyword%")
         }
 
-        return all.map { it.toDomain() }
+        return all.map { AdminUserMapper.toDomain(it) }
     }
 
     /**
