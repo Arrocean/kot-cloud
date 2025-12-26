@@ -45,7 +45,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 # Micronaut 框架
 micronaut-core = { group = "io.micronaut", name = "micronaut-core", version.ref = "micronaut" }
 micronaut-runtime = { group = "io.micronaut", name = "micronaut-runtime", version.ref = "micronaut" }
-micronaut-inject = { group = "io.micronaut", name = "micronaut-inject", version.ref = "micronaut" }
+micronaut-inject-kotlin = { group = "io.micronaut", name = "micronaut-inject-kotlin", version.ref = "micronaut" }
 micronaut-http-client = { group = "io.micronaut", name = "micronaut-http-client", version.ref = "micronaut" }
 micronaut-http = { group = "io.micronaut", name = "micronaut-http", version.ref = "micronaut" }
 micronaut-http-server-netty = { group = "io.micronaut", name = "micronaut-http-server-netty", version.ref = "micronaut" }

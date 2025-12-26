@@ -12,8 +12,8 @@ dependencies {
     // Micronaut HTTP
     implementation(libs.micronaut.http.server.netty)
     // Micronaut Data Processor
-//    kapt(libs.micronaut.data.processor)
-    ksp(libs.micronaut.inject)
+    ksp(libs.micronaut.data.processor)
+    ksp(libs.micronaut.inject.kotlin)
     // SLF4J 相关
     runtimeOnly(libs.logback.classic)
     // Micronaut Jackson

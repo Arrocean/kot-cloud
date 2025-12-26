@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 group = "com.whitesprite.dev"
@@ -50,7 +50,7 @@ dependencies {
     api(libs.micronaut.data.tx)
 
     // Micronaut Data Processor
-    kapt(libs.micronaut.data.processor)
+    ksp(libs.micronaut.data.processor)
 
     // Micronaut Jackson
     api(libs.micronaut.jackson)
@@ -63,7 +63,7 @@ dependencies {
     runtimeOnly(libs.postgresql)
 
     // Micronaut 注解处理器
-//    kapt(libs.micronaut.inject.java)
+    ksp(libs.micronaut.inject.kotlin)
 
     // system-api 模块
     api(project(":kot-module-system:kot-module-system-api"))
