@@ -1,0 +1,112 @@
+[versions]
+ktor = "3.4.1"
+micrometer = "1.16.4"
+exposed = "1.1.1"
+koin = "4.2.0"
+koter = "0.0.1"
+jackson = "3.0.3"
+
+# Micronaut 相关版本
+# TODO WhiteSprite：鉴于 micronaut 即将发布5.0.0版本，暂不使用 Micronaut 5.0 的不稳定版本
+micronaut = "4.10.18"
+micronaut-platform = "4.10.7"
+micronaut-validation = "4.12.0"
+micronaut-data  = "4.14.3"
+micronaut-jdbc = "7.0.0"
+micronaut-serde = "2.16.2"
+micronaut-security = "4.17.1"
+bcprov = "1.83"
+jbcrypt = "0.4"
+
+# DB
+postgre = "42.7.10"
+
+# Jakarta 相关
+jakarta-validation = "3.1.1"
+
+# Log 相关
+logback = "1.5.22"
+slf4j = "2.0.17"
+log4j2 = "2.25.3"
+kotlin-logging = "8.0.01"
+
+
+[libraries]
+# Ktor核心
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+
+# 数据库
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time", version.ref = "exposed" }
+
+# 监控
+micrometer-core = { group = "io.micrometer", name = "micrometer-core", version.ref = "micrometer" }
+micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus", version.ref = "micrometer" }
+
+# 依赖注入
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin" }
+
+# 日志：Kotlin Logging（API）
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
+
+# 日志：Log4j2（实现）
+log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j2" }
+log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j2" }
+log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j2" }
+
+# 日志：SLF4J
+slf4j-nop = { group = "org.slf4j", name = "slf4j-nop", version.ref = "slf4j" }
+
+#logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+
+# Micronaut 框架 Core
+micronaut-core = { group = "io.micronaut", name = "micronaut-core", version.ref = "micronaut" }
+micronaut-runtime = { group = "io.micronaut", name = "micronaut-runtime", version.ref = "micronaut" }
+micronaut-inject-kotlin = { group = "io.micronaut", name = "micronaut-inject-kotlin", version.ref = "micronaut" }
+micronaut-http-client = { group = "io.micronaut", name = "micronaut-http-client", version.ref = "micronaut" }
+micronaut-http = { group = "io.micronaut", name = "micronaut-http", version.ref = "micronaut" }
+micronaut-http-server-netty = { group = "io.micronaut", name = "micronaut-http-server-netty", version.ref = "micronaut" }
+micronaut-logging = { group = "io.micronaut", name = "micronaut-logging", version.ref = "micronaut" }
+micronaut-context = { group = "io.micronaut", name = "micronaut-context", version.ref = "micronaut" }
+micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version.ref = "micronaut" }
+micronaut-jackson-databind = { group = "io.micronaut", name = "micronaut-jackson-databind", version.ref = "micronaut" }
+
+# Micronaut Serde
+micronaut-serde-jackson = { group = "io.micronaut.serde", name = "micronaut-serde-jackson", version.ref = "micronaut-serde" }
+micronaut-jackson-processor = { group = "io.micronaut.serde", name = "micronaut-serde-processor", version.ref = "micronaut-serde" }
+
+# Micronaut Data 框架
+micronaut-data-runtime = { group = "io.micronaut.data", name = "micronaut-data-runtime", version.ref = "micronaut-data" }
+micronaut-data-processor = { group = "io.micronaut.data", name = "micronaut-data-processor", version.ref = "micronaut-data" }
+micronaut-data-jdbc = { group = "io.micronaut.data", name = "micronaut-data-jdbc", version.ref = "micronaut-data" }
+micronaut-data-tx = { group = "io.micronaut.data", name = "micronaut-data-tx", version.ref = "micronaut-data" }
+
+# Micronaut Validation
+micronaut-validation = { group = "io.micronaut.validation", name = "micronaut-validation", version.ref = "micronaut-validation" }
+micronaut-validation-processor = { group = "io.micronaut.validation", name = "micronaut-validation-processor", version.ref = "micronaut-validation" }
+
+# Micronaut Security
+micronaut-security = { group = "io.micronaut.security", name = "micronaut-security", version.ref = "micronaut-security" }
+micronaut-security-jwt = { group = "io.micronaut.security", name = "micronaut-security-jwt", version.ref = "micronaut-security" }
+bcprov-jdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bcprov" }
+jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
+
+# Hikari 连接池
+micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hikari", version.ref = "micronaut-jdbc" }
+
+# Maria DB 驱动
+
+# PostgreSQL 驱动
+postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgre" }
+
+# Jakarta Validation
+jakarta-validation = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakarta-validation" }
+
+
+
