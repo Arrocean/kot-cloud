@@ -1,6 +1,9 @@
 package com.whitesprite.dev.module.system.application.user.core.command
 
+import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
+import com.whitesprite.dev.framework.security.core.context.CurrentLoginUserProvider
 import com.whitesprite.dev.framework.security.core.password.PasswordEncoder
+import com.whitesprite.dev.module.system.constants.user.UserErrorCodeConstants
 import com.whitesprite.dev.module.system.domain.user.model.AdminUser
 import com.whitesprite.dev.module.system.domain.user.model.AdminUserDraft
 import com.whitesprite.dev.module.system.domain.user.repository.AdminUserRepository
@@ -11,18 +14,18 @@ import jakarta.inject.Singleton
 open class UserCommandHandler(
     private val adminUserRepository: AdminUserRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val currentLoginUserProvider: CurrentLoginUserProvider,
 ) {
     @Transactional
     open fun handle(command: CreateUserCommand): Long? {
         if (adminUserRepository.existsByUsername(command.name)) {
-            throw IllegalArgumentException("用户名已存在: ${command.name}")
+            throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_USERNAME_EXISTS)
         }
 
         val passwordHash = passwordEncoder.encode(command.password)
-
-        // 这里先用占位值，后面你接入安全框架/JWT 后改为从上下文取
-        val currentUserId = 0L
-        val tenantId = 1L
+        val loginUser = currentLoginUserProvider.requireLoginUser()
+        val currentUserId = loginUser.id
+        val tenantId = loginUser.tenantId
 
         val draft = AdminUserDraft(
             username = command.name,
@@ -59,7 +62,8 @@ open class UserCommandHandler(
 
     @Transactional
     open fun handle(command: UpdateUserCommand): AdminUser {
-        val entity = adminUserRepository.findById(command.id) ?: throw NoSuchElementException("用户不存在: ${command.id}")
+        val entity = adminUserRepository.findById(command.id)
+            ?: throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_NOT_EXISTS)
         val updated = entity.copy(username = command.name)
         return adminUserRepository.update(updated)
     }

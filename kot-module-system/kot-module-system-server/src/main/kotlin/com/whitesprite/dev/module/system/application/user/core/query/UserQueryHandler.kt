@@ -1,6 +1,6 @@
 package com.whitesprite.dev.module.system.application.user.core.query
 
-import com.whitesprite.dev.framework.common.exception.ServiceException
+import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.common.poko.PageResult
 import com.whitesprite.dev.module.system.constants.user.UserErrorCodeConstants
 import com.whitesprite.dev.module.system.domain.user.model.AdminUser
@@ -20,7 +20,8 @@ open class UserQueryHandler(
      */
     @ReadOnly
     open fun handle(query: GetUserQuery): AdminUser? {
-        return adminUserRepository.findById(query.id) ?: throw ServiceException(UserErrorCodeConstants.USER_NOT_FOUND)
+        return adminUserRepository.findById(query.id)
+            ?: throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_NOT_FOUND)
     }
 
     /**

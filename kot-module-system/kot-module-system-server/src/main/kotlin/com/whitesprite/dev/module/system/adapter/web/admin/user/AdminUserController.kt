@@ -118,11 +118,11 @@ open class AdminUserController(
     }
 
     /**
-     * 测试Log4j2
+     * 测试日志系统
      */
-    @Get("/testLog4j2")
-    open fun testLog4j2(): CommonResult<String> {
-        userService.testLog4j2()
-        return success("Log4j2测试成功")
+    @Get("/testLogging")
+    open fun testLogging(): CommonResult<String> {
+        userService.testLogging()
+        return success("日志系统测试成功")
     }
 }

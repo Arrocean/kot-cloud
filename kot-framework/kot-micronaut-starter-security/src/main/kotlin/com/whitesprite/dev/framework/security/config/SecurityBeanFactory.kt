@@ -1,5 +1,7 @@
 package com.whitesprite.dev.framework.security.config
 
+import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
+import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.security.core.password.Argon2idPasswordEncoder
 import com.whitesprite.dev.framework.security.core.password.BCryptPasswordEncoder
 import com.whitesprite.dev.framework.security.core.password.PasswordEncoder
@@ -51,8 +53,10 @@ class SecurityBeanFactory {
         return when (securityProperties.password.encoder.trim().lowercase()) {
             "argon2id" -> Argon2idPasswordEncoder(securityProperties.password.argon2id, secureRandom)
             "bcrypt" -> BCryptPasswordEncoder(securityProperties.password.bcrypt)
-            else -> throw IllegalStateException(
-                "不支持的密码编码算法: ${securityProperties.password.encoder}，当前仅支持 argon2id / bcrypt"
+            else -> throw ServiceExceptionFactory.exception(
+                GlobalErrorCodeConstants.ERROR_CONFIGURATION.code,
+                "不支持的密码编码算法: ${securityProperties.password.encoder}，当前仅支持 argon2id / bcrypt",
+                GlobalErrorCodeConstants.ERROR_CONFIGURATION.httpStatusCode
             )
         }
     }

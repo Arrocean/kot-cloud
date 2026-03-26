@@ -11,6 +11,9 @@ dependencies {
     implementation(libs.micronaut.http)
     implementation(libs.micronaut.http.server.netty)
 
+    // Kotlin Logging API
+    implementation(libs.kotlin.logging)
+
     // Micronaut Jackson
     implementation(libs.micronaut.serde.jackson)
     ksp(libs.micronaut.jackson.processor)

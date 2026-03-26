@@ -1,12 +1,13 @@
 package com.whitesprite.dev.framework.security.core.token
 
 import com.whitesprite.dev.framework.common.enums.toCommonUserTypeEnum
+import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
+import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.security.config.SecurityProperties
 import com.whitesprite.dev.framework.security.core.context.LoginUser
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.token.generator.TokenGenerator
 import jakarta.inject.Singleton
-import java.util.LinkedHashSet
 
 /**
  * 基于 Micronaut JWT 的 Token 服务实现。
@@ -26,7 +27,13 @@ open class JwtTokenService(
             buildAttributes(loginUser)
         )
         return tokenGenerator.generateToken(authentication, securityProperties.accessTokenExpireSeconds)
-            .orElseThrow { IllegalStateException("生成 Access Token 失败") }
+            .orElseThrow {
+                ServiceExceptionFactory.exception(
+                    GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR.code,
+                    "生成 Access Token 失败",
+                    GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR.httpStatusCode
+                )
+            }
     }
 
     override fun toLoginUser(authentication: Authentication): LoginUser? {

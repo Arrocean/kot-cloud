@@ -1,5 +1,7 @@
 package com.whitesprite.dev.module.system.application.user.core.facade
 
+import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
+import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.common.poko.PageResult
 import com.whitesprite.dev.module.system.adapter.web.admin.user.CreateUserRequest
 import com.whitesprite.dev.module.system.adapter.web.admin.user.UpdateUserRequest
@@ -9,8 +11,8 @@ import com.whitesprite.dev.module.system.application.user.core.query.ListUserQue
 import com.whitesprite.dev.module.system.application.user.core.query.PageListUserQuery
 import com.whitesprite.dev.module.system.application.user.core.query.UserQueryHandler
 import com.whitesprite.dev.module.system.domain.user.model.AdminUser
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 
 /**
  * 用户服务实现
@@ -21,7 +23,7 @@ open class AdminUserAppService(
     private val queryHandler: UserQueryHandler
 ){
 
-    private val log = LoggerFactory.getLogger(AdminUserAppService::class.java)
+    private val log = KotlinLogging.logger {}
 
     /**
      * 创建用户
@@ -36,8 +38,11 @@ open class AdminUserAppService(
     /**
      * 批量创建用户
      */
-    fun batchCreate(reqs: List<CreateUserRequest>): List<Long>? {
-        TODO ("Not yet implemented")
+    fun batchCreate(reqs: List<CreateUserRequest>): List<Long> {
+        if (reqs.isEmpty()) {
+            return emptyList()
+        }
+        throw ServiceExceptionFactory.exception(GlobalErrorCodeConstants.NOT_IMPLEMENTED)
     }
 
     /**
@@ -103,14 +108,14 @@ open class AdminUserAppService(
     }
 
     /**
-     * 测试Log4j2
+     * 测试日志系统
      */
-    fun testLog4j2() {
-        log.trace("LOG4J2-TEST trace")
-        log.debug("LOG4J2-TEST debug")
-        log.info("LOG4J2-TEST info")
-        log.warn("LOG4J2-TEST warn")
-        log.error("LOG4J2-TEST error")
+    fun testLogging() {
+        log.trace { "LOGGING-TEST trace" }
+        log.debug { "LOGGING-TEST debug" }
+        log.info { "LOGGING-TEST info" }
+        log.warn { "LOGGING-TEST warn" }
+        log.error { "LOGGING-TEST error" }
     }
 
 }

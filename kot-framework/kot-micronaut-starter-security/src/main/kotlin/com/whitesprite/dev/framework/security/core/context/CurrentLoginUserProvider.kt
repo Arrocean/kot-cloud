@@ -1,5 +1,7 @@
 package com.whitesprite.dev.framework.security.core.context
 
+import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
+import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.security.core.token.TokenService
 import io.micronaut.security.utils.SecurityService
 import jakarta.inject.Singleton
@@ -24,7 +26,11 @@ interface CurrentLoginUserProvider {
      * @return 登录用户
      */
     fun requireLoginUser(): LoginUser {
-        return getLoginUserOrNull() ?: throw IllegalStateException("当前未登录或登录上下文无效")
+        return getLoginUserOrNull() ?: throw ServiceExceptionFactory.exception(
+            GlobalErrorCodeConstants.UNAUTHORIZED.code,
+            "当前未登录或登录上下文无效",
+            GlobalErrorCodeConstants.UNAUTHORIZED.httpStatusCode
+        )
     }
 }
 

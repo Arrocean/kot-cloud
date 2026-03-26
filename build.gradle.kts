@@ -1,9 +1,9 @@
 plugins {
-    kotlin("jvm") version "2.3.10" apply false
-    id("com.google.devtools.ksp") version "2.3.5" apply false
-    kotlin("plugin.allopen") version "2.3.10" apply false
-    id("io.micronaut.application") version "4.6.1" apply false
-    id("org.graalvm.buildtools.native") version "0.11.3" apply false
+    kotlin("jvm") version "2.3.20" apply false
+    id("com.google.devtools.ksp") version "2.3.6" apply false
+    kotlin("plugin.allopen") version "2.3.20" apply false
+    id("io.micronaut.application") version "4.6.2" apply false
+    id("org.graalvm.buildtools.native") version "0.11.5" apply false
 }
 
 val commonRepositories: RepositoryHandler.() -> Unit = {

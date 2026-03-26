@@ -2,6 +2,7 @@ package com.whitesprite.dev.framework.common.poko
 
 import com.whitesprite.dev.framework.common.exception.ErrorCode
 import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants.SUCCESS
+import com.whitesprite.dev.framework.common.exception.util.ErrorMessageFormatter
 
 /**
  * 通用返回结果类
@@ -66,15 +67,7 @@ fun <T> error(code: Int?, msg: String?): CommonResult<T> {
  */
 fun <T> error(errorCode: ErrorCode, vararg params: Any?): CommonResult<T> {
     require(SUCCESS.code != errorCode.code) { "Code 必须是错误的码！" }
-    val formattedMsg = if (params.isNotEmpty()) {
-        try {
-            String.format(errorCode.msg, *params)
-        } catch (_: java.util.IllegalFormatException) {
-            errorCode.msg
-        }
-    } else {
-        errorCode.msg
-    }
+    val formattedMsg = ErrorMessageFormatter.format(errorCode.code, errorCode.msg, *params)
     return CommonResult(errorCode.code, formattedMsg, null)
 }
 

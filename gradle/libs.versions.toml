@@ -25,10 +25,9 @@ postgre = "42.7.10"
 jakarta-validation = "3.1.1"
 
 # Log 相关
-logback = "1.5.22"
 slf4j = "2.0.17"
-log4j2 = "2.25.3"
 kotlin-logging = "8.0.01"
+micronaut-tracing-opentelemetry = "7.2.0"
 
 
 [libraries]
@@ -55,15 +54,12 @@ koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin"
 # 日志：Kotlin Logging（API）
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
 
-# 日志：Log4j2（实现）
-log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j2" }
-log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j2" }
-log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j2" }
-
 # 日志：SLF4J
-slf4j-nop = { group = "org.slf4j", name = "slf4j-nop", version.ref = "slf4j" }
+slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 
-#logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+# 日志：OpenTelemetry（实现）
+micronaut-tracing-opentelemetry = { group = "io.micronaut.tracing", name = "micronaut-tracing-opentelemetry", version.ref = "micronaut-tracing-opentelemetry" }
+
 
 # Micronaut 框架 Core
 micronaut-core = { group = "io.micronaut", name = "micronaut-core", version.ref = "micronaut" }

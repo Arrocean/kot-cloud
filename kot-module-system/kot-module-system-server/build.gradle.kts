@@ -11,6 +11,9 @@ dependencies {
     api(libs.micronaut.http.client)
     api(libs.micronaut.http.server.netty)
 
+    // Kotlin Logging API
+    implementation(libs.kotlin.logging)
+
     // Micronaut Validation
     api(libs.micronaut.validation)
 
@@ -35,8 +38,6 @@ dependencies {
     // Micronaut 注解处理器
     ksp(libs.micronaut.inject.kotlin)
 
-    // SLF4J 空实现
-    ksp(libs.slf4j.nop)
 
     // system-api 模块
     api(project(":kot-module-system:kot-module-system-api"))

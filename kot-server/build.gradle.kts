@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.micronaut.runtime)
     // Micronaut HTTP
     implementation(libs.micronaut.http.server.netty)
+    implementation(libs.micronaut.tracing.opentelemetry)
 
     // Micronaut Data Processor
     ksp(libs.micronaut.inject.kotlin)
@@ -26,10 +27,8 @@ dependencies {
     // Kotlin 友好日志 API（编译期需要）
     implementation(libs.kotlin.logging)
 
-    // SLF4J -> Log4j2（运行时绑定）
-    runtimeOnly(libs.log4j.slf4j2.impl)
-    runtimeOnly(libs.log4j.core)
-    runtimeOnly(libs.log4j.api)
+    // SLF4J Simple（轻量控制台后端）
+    runtimeOnly(libs.slf4j.simple)
 
     // Micronaut Jackson
     implementation(libs.micronaut.serde.jackson)
@@ -46,6 +45,9 @@ dependencies {
 configurations.configureEach {
     exclude(group = "ch.qos.logback", module = "logback-classic")
     exclude(group = "ch.qos.logback", module = "logback-core")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-core")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-api")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
 }
 
 ksp {
