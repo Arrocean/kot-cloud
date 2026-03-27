@@ -1,7 +1,6 @@
 package com.whitesprite.dev.framework.security.core.token
 
 import com.whitesprite.dev.framework.common.enums.toCommonUserTypeEnum
-import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
 import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.security.config.SecurityProperties
 import com.whitesprite.dev.framework.security.core.context.LoginUser
@@ -28,11 +27,7 @@ open class JwtTokenService(
         )
         return tokenGenerator.generateToken(authentication, securityProperties.accessTokenExpireSeconds)
             .orElseThrow {
-                ServiceExceptionFactory.exception(
-                    GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR.code,
-                    "生成 Access Token 失败",
-                    GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR.httpStatusCode
-                )
+                ServiceExceptionFactory.internalServerError("生成 Access Token 失败")
             }
     }
 
