@@ -30,7 +30,7 @@ open class SecurityProperties {
         /**
          * 默认编码算法。
          *
-         * 支持：argon2id / bcrypt
+         * 支持：argon2id / bcrypt / pbkdf2
          */
         var encoder: String = "argon2id"
 
@@ -45,7 +45,7 @@ open class SecurityProperties {
         var bcrypt: BCryptProperties = BCryptProperties()
 
         /**
-         * PBKDF2 参数
+         * PBKDF2-HMAC-SHA256 参数。
          */
         var pbkdf2: PBKDF2Properties = PBKDF2Properties()
     }

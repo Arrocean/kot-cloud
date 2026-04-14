@@ -39,6 +39,10 @@
 - [KSP](https://github.com/google/ksp) 2.3.6 - 用于代码生成，提供更快的编译速度和更好的Kotlin支持
 - [Micronaut Application](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/) 4.6.2 - 用于创建和管理Micronaut应用
 
+
+#### 临时注意事项
+如果你需要使用本地配置文件(application.properties)进行开发，请确保在运行环境中添加环境变量 `MICRONAUT_ENVIRONMENTS=local`，以便正确加载本地配置文件。
+
 #### 安装教程
 
 1.  暂无，等待后续完善项目后进行文档完善

@@ -26,6 +26,12 @@ open class AdminAuthAppService(
      * 管理员登录。
      */
     open fun login(req: AdminLoginRequest): AdminLoginResponse {
+        // 校验验证码
+        // TODO varifyCaptcha(req.captchaCode)
+
+        // 校验获取用户
+//        val loginUser = authenticate(req.username, req.password)
+
         throw ServiceExceptionFactory.notImplemented(
             "管理员登录链路待实现：后续补充用户校验、密码比对与 Token 签发"
         )

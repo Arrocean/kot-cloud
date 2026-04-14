@@ -4,6 +4,7 @@ import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFacto
 import com.whitesprite.dev.framework.security.core.password.Argon2idPasswordEncoder
 import com.whitesprite.dev.framework.security.core.password.BCryptPasswordEncoder
 import com.whitesprite.dev.framework.security.core.password.PasswordEncoder
+import com.whitesprite.dev.framework.security.core.password.PBKDF2PasswordEncoder
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import java.security.SecureRandom
@@ -43,6 +44,7 @@ class SecurityBeanFactory {
      * 当前支持：
      * - argon2id（默认，推荐）
      * - bcrypt
+     * - pbkdf2（PBKDF2-HMAC-SHA256）
      */
     @Singleton
     fun passwordEncoder(
@@ -52,9 +54,9 @@ class SecurityBeanFactory {
         return when (securityProperties.password.encoder.trim().lowercase()) {
             "argon2id" -> Argon2idPasswordEncoder(securityProperties.password.argon2id, secureRandom)
             "bcrypt" -> BCryptPasswordEncoder(securityProperties.password.bcrypt)
-            "pbkdf2" -> throw ServiceExceptionFactory.notImplemented("PBKDF2 密码编码器待实现")
+            "pbkdf2" -> PBKDF2PasswordEncoder(securityProperties.password.pbkdf2, secureRandom)
             else -> throw ServiceExceptionFactory.configurationError(
-                "不支持的密码编码算法: {}，当前仅支持 argon2id / bcrypt",
+                "不支持的密码编码算法: {}，当前仅支持 argon2id / bcrypt / pbkdf2",
                 securityProperties.password.encoder
             )
         }
