@@ -52,6 +52,7 @@ class SecurityBeanFactory {
         return when (securityProperties.password.encoder.trim().lowercase()) {
             "argon2id" -> Argon2idPasswordEncoder(securityProperties.password.argon2id, secureRandom)
             "bcrypt" -> BCryptPasswordEncoder(securityProperties.password.bcrypt)
+            "pbkdf2" -> throw ServiceExceptionFactory.notImplemented("PBKDF2 密码编码器待实现")
             else -> throw ServiceExceptionFactory.configurationError(
                 "不支持的密码编码算法: {}，当前仅支持 argon2id / bcrypt",
                 securityProperties.password.encoder

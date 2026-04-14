@@ -43,6 +43,11 @@ open class SecurityProperties {
          * BCrypt 参数。
          */
         var bcrypt: BCryptProperties = BCryptProperties()
+
+        /**
+         * PBKDF2 参数
+         */
+        var pbkdf2: PBKDF2Properties = PBKDF2Properties()
     }
 
     @ConfigurationProperties("argon2id")
@@ -81,6 +86,25 @@ open class SecurityProperties {
          * BCrypt 成本 / 加密轮次。
          */
         var rounds: Int = 10
+    }
+
+    @ConfigurationProperties("pbkdf2")
+    open class PBKDF2Properties {
+
+        /**
+         * 迭代次数。
+         */
+        var iterations: Int = 185000
+
+        /**
+         * 输出哈希长度（字节）。
+         */
+        var hashLength: Int = 32
+
+        /**
+         * 随机盐长度（字节）。
+         */
+        var saltLength: Int = 16
     }
 }
 
