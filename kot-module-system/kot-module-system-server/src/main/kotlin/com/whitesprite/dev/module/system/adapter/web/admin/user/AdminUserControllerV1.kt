@@ -22,6 +22,9 @@ open class AdminUserControllerV1(
      * 用户服务
      */
     private val userService: AdminUserAppService
+    /**
+     * 查询处理器
+     */
 ) {
 
     /**

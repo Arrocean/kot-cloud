@@ -25,6 +25,18 @@ open class UserQueryHandler(
     }
 
     /**
+     * 根据用户名查询用户
+     *
+     * @param query 查询参数
+     * @return 用户
+     */
+//    @ReadOnly
+//    open fun handle(query: GetUserByUsernameQuery): AdminUser? {
+//        return adminUserRepository.findByUsername(query.username)
+//            ?: throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_NOT_FOUND)
+//    }
+
+    /**
      * 列表查询用户
      *
      * @param query 查询参数

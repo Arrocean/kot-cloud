@@ -6,6 +6,10 @@ import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminAuthAssembl
 import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminAuthProfileResponse
 import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminLoginRequest
 import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminLoginResponse
+import com.whitesprite.dev.module.system.application.user.core.query.GetUserQuery
+import com.whitesprite.dev.module.system.application.user.core.query.UserQueryHandler
+import com.whitesprite.dev.module.system.domain.user.model.AdminUser
+import com.whitesprite.dev.module.system.enums.logger.LoginLogTypeEnum
 import jakarta.inject.Singleton
 
 /**
@@ -18,8 +22,9 @@ import jakarta.inject.Singleton
  * @author WhiteSprite
  */
 @Singleton
-open class AdminAuthAppService(
+open class AdminAuthService(
     private val currentLoginUserProvider: CurrentLoginUserProvider,
+    private val userQueryHandler: UserQueryHandler
 ) {
 
     /**
@@ -30,7 +35,16 @@ open class AdminAuthAppService(
         // TODO varifyCaptcha(req.captchaCode)
 
         // 校验获取用户
-//        val loginUser = authenticate(req.username, req.password)
+        val user = authenticate(req.username, req.password)
+
+        // 社交用户相关
+//        if(req.socialType != null) {
+//            // TODO WhiteSprite：后续补充社交登录相关逻辑
+//            throw ServiceExceptionFactory.notImplemented("社交登录待实现")
+//        }
+
+        // 创建Token，记录登录日志
+//        return createTokenAfterLoginSuccess()
 
         throw ServiceExceptionFactory.notImplemented(
             "管理员登录链路待实现：后续补充用户校验、密码比对与 Token 签发"
@@ -53,6 +67,20 @@ open class AdminAuthAppService(
     open fun getProfile(): AdminAuthProfileResponse {
         val loginUser = currentLoginUserProvider.requireLoginUser()
         return AdminAuthAssembler.toProfileResponse(loginUser)
+    }
+
+    open fun authenticate(username: String, password: String): AdminUser {
+        val LoginLogTypeEnum = LoginLogTypeEnum.LOGIN_PASSWORD
+        // 获取用户
+        val query = GetUserQuery
+//        val user = userQueryHandler.handle(GetUserQuery.)
+//            ?: throw ServiceExceptionFactory.exception("用户不存在")
+
+        // TODO 校验密码
+
+        throw ServiceExceptionFactory.notImplemented(
+            "管理员登录链路待实现：后续补充用户校验、密码比对与 Token 签发"
+        )
     }
 }
 

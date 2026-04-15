@@ -3,7 +3,7 @@ package com.whitesprite.dev.module.system.adapter.web.admin.auth
 import com.whitesprite.dev.framework.common.http.ApiPrefix
 import com.whitesprite.dev.framework.common.poko.CommonResult
 import com.whitesprite.dev.framework.common.poko.success
-import com.whitesprite.dev.module.system.application.auth.core.facade.AdminAuthAppService
+import com.whitesprite.dev.module.system.application.auth.core.facade.AdminAuthService
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -33,7 +33,7 @@ open class AdminAuthControllerV1(
     /**
      * 认证应用服务
      */
-    private val authAppService: AdminAuthAppService,
+    private val authAppService: AdminAuthService,
 ) {
 
     /**

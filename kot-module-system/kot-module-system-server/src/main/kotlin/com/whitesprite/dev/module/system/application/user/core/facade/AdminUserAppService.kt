@@ -84,6 +84,14 @@ open class AdminUserAppService(
     }
 
     /**
+     * 根据用户名查询用户
+     */
+    fun getByUsername(username: String): AdminUser? {
+        // TODO WhiteSprite：后续补充根据用户名查询用户的 Query 与 Handler
+        throw ServiceExceptionFactory.notImplemented("根据用户名查询用户待实现")
+    }
+
+    /**
      * 列表查询用户
      * @param keyword 关键字
      * @return 用户列表
