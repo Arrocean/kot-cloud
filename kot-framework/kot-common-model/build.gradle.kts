@@ -7,4 +7,5 @@ group = "com.whitesprite.dev"
 
 dependencies {
     api(libs.jakarta.validation)
+    compileOnly(libs.micronaut.serde.jackson)
 }

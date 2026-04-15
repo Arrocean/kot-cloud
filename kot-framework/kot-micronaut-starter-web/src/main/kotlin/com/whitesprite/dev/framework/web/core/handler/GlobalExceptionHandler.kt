@@ -115,7 +115,7 @@ class ServiceExceptionHandler :
         val ec: ErrorCode = ex.errorCode
 
         log.warn {
-            "业务异常: ${request.summary()}, code=${ec.code}, msg=${ex.message}"
+            "[业务异常]: ${request.summary()}, code=${ec.code}, msg=${ex.message}"
         }
 
         return buildErrorResponse(ec)

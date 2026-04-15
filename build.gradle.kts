@@ -6,6 +6,12 @@ plugins {
     id("org.graalvm.buildtools.native") version "0.11.5" apply false
 }
 
+tasks.wrapper {
+    gradleVersion = "9.4.1"
+    distributionType = Wrapper.DistributionType.ALL
+    distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-${gradleVersion}-all.zip"
+}
+
 val commonRepositories: RepositoryHandler.() -> Unit = {
     maven("https://mirrors.huaweicloud.com/repository/maven/")
     mavenCentral()

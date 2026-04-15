@@ -1,8 +1,11 @@
 package com.whitesprite.dev.framework.common.poko
 
 import com.whitesprite.dev.framework.common.exception.ErrorCode
+import com.whitesprite.dev.framework.common.exception.ServiceException
+import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants
 import com.whitesprite.dev.framework.common.exception.constants.GlobalErrorCodeConstants.SUCCESS
 import com.whitesprite.dev.framework.common.exception.util.ErrorMessageFormatter
+import io.micronaut.serde.annotation.Serdeable
 
 /**
  * 通用返回结果类
@@ -12,6 +15,7 @@ import com.whitesprite.dev.framework.common.exception.util.ErrorMessageFormatter
  * @param data 数据
  * @author WhiteSprite
  */
+@Serdeable.Serializable
 data class CommonResult<T>(
     /**
      * 错误码
@@ -77,3 +81,34 @@ fun <T> error(errorCode: ErrorCode, vararg params: Any?): CommonResult<T> {
 fun <T> error(result: CommonResult<*>): CommonResult<T> {
     return error(result.code, result.msg)
 }
+
+/**
+ * 判断 CommonResult 是否成功
+ */
+fun isSuccess(code: Int?): Boolean {
+    return code == SUCCESS.code
+}
+
+fun CommonResult<*>.isSuccess(): Boolean {
+    return isSuccess(this.code)
+}
+
+/**
+ * 判断 CommonResult 是否失败
+ */
+fun isError(result: CommonResult<*>?): Boolean {
+    return result?.let { !it.isSuccess() } ?: true
+}
+
+fun CommonResult<*>.checkError() {
+    if (isSuccess()) {
+        return
+    }
+    throw ServiceException(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR)
+}
+
+fun CommonResult<*>.getCheckedData(): Any? {
+    checkError()
+    return this.data
+}
+

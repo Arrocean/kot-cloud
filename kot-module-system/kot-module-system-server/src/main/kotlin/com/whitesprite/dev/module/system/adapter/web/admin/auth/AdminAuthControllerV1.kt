@@ -28,8 +28,8 @@ import jakarta.validation.Valid
  */
 @Validated
 @Secured(SecurityRule.IS_AUTHENTICATED)
-@Controller(ApiPrefix.ADMIN + "/system/auth")
-open class AdminAuthController(
+@Controller(ApiPrefix.ADMIN_V1 + "/system/auth")
+open class AdminAuthControllerV1(
     /**
      * 认证应用服务
      */

@@ -16,8 +16,8 @@ import jakarta.validation.Valid
  * @author WhiteSprite
  */
 @Validated
-@Controller(ApiPrefix.ADMIN + "/system/users")
-open class AdminUserController(
+@Controller(ApiPrefix.ADMIN_V1 + "/system/users")
+open class AdminUserControllerV1(
     /**
      * 用户服务
      */

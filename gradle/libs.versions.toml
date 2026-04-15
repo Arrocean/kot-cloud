@@ -8,14 +8,14 @@ jackson = "3.0.3"
 
 # Micronaut 相关版本
 # TODO WhiteSprite：鉴于 micronaut 即将发布5.0.0版本，暂不使用 Micronaut 5.0 的不稳定版本
-micronaut = "4.10.18"
+micronaut = "4.10.21"
 micronaut-platform = "4.10.7"
 micronaut-validation = "4.12.0"
 micronaut-data  = "4.14.3"
-micronaut-jdbc = "7.0.0"
+micronaut-sql = "7.0.0"
 micronaut-serde = "2.16.2"
 micronaut-security = "4.17.1"
-bcprov = "1.83"
+bcprov = "1.84"
 jbcrypt = "0.4"
 
 # DB
@@ -90,11 +90,14 @@ micronaut-validation-processor = { group = "io.micronaut.validation", name = "mi
 # Micronaut Security
 micronaut-security = { group = "io.micronaut.security", name = "micronaut-security", version.ref = "micronaut-security" }
 micronaut-security-jwt = { group = "io.micronaut.security", name = "micronaut-security-jwt", version.ref = "micronaut-security" }
-bcprov-jdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bcprov" }
-jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
 
 # Hikari 连接池
-micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hikari", version.ref = "micronaut-jdbc" }
+micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hikari", version.ref = "micronaut-sql" }
+
+# Bouncy Castle 加密库
+bcprov-jdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bcprov" }
+# jBCrypt 密码哈希库
+jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
 
 # Maria DB 驱动
 
