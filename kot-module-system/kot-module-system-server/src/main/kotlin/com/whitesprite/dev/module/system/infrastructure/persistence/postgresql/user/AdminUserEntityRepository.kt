@@ -6,6 +6,7 @@ import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import io.micronaut.data.model.query.builder.sql.Dialect
 import io.micronaut.data.repository.PageableRepository
+import java.util.Optional
 
 /**
  * 用户数据访问接口
@@ -31,7 +32,7 @@ interface AdminUserEntityRepository : PageableRepository<AdminUserEntity, Long> 
      * @param name 用户名
      * @return 用户
      */
-    fun findByUsername(name: String): List<AdminUserEntity>
+    fun findByUsername(name: String): Optional<AdminUserEntity>
 
     /**
      * 根据昵称模糊查询用户

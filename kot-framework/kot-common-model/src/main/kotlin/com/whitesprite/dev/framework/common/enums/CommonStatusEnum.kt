@@ -49,12 +49,32 @@ fun Int?.isEnable(): Boolean {
 }
 
 /**
+ * 判断是否启用
+ * 针对Short类型的状态值
+ *
+ * @return 是否启用
+ */
+fun Short?.isEnable(): Boolean {
+    return this?.toInt().toCommonStatusEnum()?.bool == true
+}
+
+/**
  * 判断是否禁用
  *
  * @return 是否禁用
  */
 fun Int?.isDisable(): Boolean {
     return this.toCommonStatusEnum()?.bool == false
+}
+
+/**
+ * 判断是否禁用
+ * 针对Short类型的状态值
+ *
+ * @return 是否禁用
+ */
+fun Short?.isDisable(): Boolean {
+    return this?.toInt().toCommonStatusEnum()?.bool == false
 }
 
 /**

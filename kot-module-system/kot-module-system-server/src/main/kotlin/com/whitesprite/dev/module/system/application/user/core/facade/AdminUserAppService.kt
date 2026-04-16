@@ -6,6 +6,7 @@ import com.whitesprite.dev.framework.common.poko.PageResult
 import com.whitesprite.dev.module.system.adapter.web.admin.user.CreateUserRequest
 import com.whitesprite.dev.module.system.adapter.web.admin.user.UpdateUserRequest
 import com.whitesprite.dev.module.system.application.user.core.command.*
+import com.whitesprite.dev.module.system.application.user.core.query.GetUserByUsernameQuery
 import com.whitesprite.dev.module.system.application.user.core.query.GetUserQuery
 import com.whitesprite.dev.module.system.application.user.core.query.ListUserQuery
 import com.whitesprite.dev.module.system.application.user.core.query.PageListUserQuery
@@ -87,8 +88,7 @@ open class AdminUserAppService(
      * 根据用户名查询用户
      */
     fun getByUsername(username: String): AdminUser? {
-        // TODO WhiteSprite：后续补充根据用户名查询用户的 Query 与 Handler
-        throw ServiceExceptionFactory.notImplemented("根据用户名查询用户待实现")
+        return queryHandler.handle(GetUserByUsernameQuery(username))
     }
 
     /**

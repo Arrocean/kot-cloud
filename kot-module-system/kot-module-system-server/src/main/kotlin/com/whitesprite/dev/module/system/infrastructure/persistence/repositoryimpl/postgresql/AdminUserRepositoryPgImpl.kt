@@ -80,6 +80,11 @@ class AdminUserRepositoryPgImpl(
             .orElse(null)
     }
 
+    override fun findByUsername(username: String): AdminUser? {
+        return entityRepo.findByUsername(username).map(AdminUserMapper::toDomain)
+            .orElse(null)
+    }
+
     /**
      * 查询所有用户
      * @return 用户列表

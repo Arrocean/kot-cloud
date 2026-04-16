@@ -55,6 +55,13 @@ interface AdminUserRepository{
     fun findById(id: Long): AdminUser?
 
     /**
+     * 根据用户名查询用户
+     * @param username 用户名
+     * @return 用户
+     */
+    fun findByUsername(username: String): AdminUser?
+
+    /**
      * 查询所有用户
      * @return 用户列表
      */

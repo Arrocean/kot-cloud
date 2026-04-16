@@ -3,7 +3,7 @@ package com.whitesprite.dev.module.system.constants.user
 import com.whitesprite.dev.framework.common.exception.ErrorCode
 
 /**
- * System 错误码枚举类
+ * System 用户错误码枚举类
  *
  * system User，使用 1-002-003-000 段
  */
