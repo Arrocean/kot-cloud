@@ -11,68 +11,68 @@ interface AdminUserRepository{
      * @param user 用户草稿
      * @return 用户
      */
-    fun save(user: AdminUserDraft): AdminUser
+    suspend fun save(user: AdminUserDraft): AdminUser
 
     /**
      * 删除用户
      * @param id 用户ID
      */
-    fun deleteById(id: Long)
+    suspend fun deleteById(id: Long)
 
     /**
      * 批量删除用户
      *
      * @param ids 用户ID列表
      */
-    fun batchDelete(ids: List<Long>)
+    suspend fun batchDelete(ids: List<Long>)
 
     /**
      * 修改用户
      * @param user 用户
      * @return 用户
      */
-    fun update(user: AdminUser): AdminUser
+    suspend fun update(user: AdminUser): AdminUser
 
     /**
      * 判断用户名是否存在
      * @param username 用户名
      * @return 是否存在
      */
-    fun existsByUsername(username: String): Boolean
+    suspend fun existsByUsername(username: String): Boolean
 
     /**
      * 判断用户ID是否存在
      * @param id 用户ID
      * @return 存在返回true
      */
-    fun existsById(id: Long): Boolean
+    suspend fun existsById(id: Long): Boolean
 
     /**
      * 根据用户ID查询用户
      * @param id 用户ID
      * @return 用户
      */
-    fun findById(id: Long): AdminUser?
+    suspend fun findById(id: Long): AdminUser?
 
     /**
      * 根据用户名查询用户
      * @param username 用户名
      * @return 用户
      */
-    fun findByUsername(username: String): AdminUser?
+    suspend fun findByUsername(username: String): AdminUser?
 
     /**
      * 查询所有用户
      * @return 用户列表
      */
-    fun findAll(): List<AdminUser>
+    suspend fun findAll(): List<AdminUser>
 
     /**
      * 根据昵称模糊查询用户
      * @param name 昵称
      * @return 用户列表
      */
-    fun findByNicknameIlike(name: String): List<AdminUser>
+    suspend fun findByNicknameIlike(name: String): List<AdminUser>
 
     /**
      * 分页查询所有用户
@@ -81,7 +81,7 @@ interface AdminUserRepository{
      * @param pageSize 页大小
      * @return 用户列表
      */
-    fun findByPage(pageNo: Int, pageSize: Int): PageResult<AdminUser>
+    suspend fun findByPage(pageNo: Int, pageSize: Int): PageResult<AdminUser>
 
     /**
      * 分页列表查询用户
@@ -91,6 +91,6 @@ interface AdminUserRepository{
      * @param keyword 关键字
      * @return 用户列表
      */
-    fun findByPage(pageNo: Int, pageSize: Int, keyword: String): PageResult<AdminUser>
+    suspend fun findByPage(pageNo: Int, pageSize: Int, keyword: String): PageResult<AdminUser>
 
 }

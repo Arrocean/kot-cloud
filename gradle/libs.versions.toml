@@ -11,6 +11,7 @@ jackson = "3.0.3"
 micronaut = "4.10.21"
 micronaut-platform = "4.10.7"
 micronaut-validation = "4.12.0"
+micronaut-redis = "6.9.0"
 micronaut-data  = "4.14.3"
 micronaut-sql = "7.0.0"
 micronaut-serde = "2.16.2"
@@ -20,6 +21,7 @@ jbcrypt = "0.4"
 
 # DB
 postgre = "42.7.10"
+postgre-r2dbc = "1.1.1.RELEASE"
 
 # Jakarta 相关
 jakarta-validation = "3.1.1"
@@ -28,6 +30,9 @@ jakarta-validation = "3.1.1"
 slf4j = "2.0.17"
 kotlin-logging = "8.0.01"
 micronaut-tracing-opentelemetry = "7.2.0"
+
+# Coroutine 相关
+kotlinx-coroutines = "1.10.2"
 
 
 [libraries]
@@ -77,9 +82,13 @@ micronaut-jackson-databind = { group = "io.micronaut", name = "micronaut-jackson
 micronaut-serde-jackson = { group = "io.micronaut.serde", name = "micronaut-serde-jackson", version.ref = "micronaut-serde" }
 micronaut-jackson-processor = { group = "io.micronaut.serde", name = "micronaut-serde-processor", version.ref = "micronaut-serde" }
 
+# Micronaut Redis
+micronaut-redis-lettuce = { group = "io.micronaut.redis", name = "micronaut-redis-lettuce", version.ref = "micronaut-redis" }
+
 # Micronaut Data 框架
 micronaut-data-runtime = { group = "io.micronaut.data", name = "micronaut-data-runtime", version.ref = "micronaut-data" }
 micronaut-data-processor = { group = "io.micronaut.data", name = "micronaut-data-processor", version.ref = "micronaut-data" }
+micronaut-data-r2dbc = { group = "io.micronaut.data", name = "micronaut-data-r2dbc", version.ref = "micronaut-data" }
 micronaut-data-jdbc = { group = "io.micronaut.data", name = "micronaut-data-jdbc", version.ref = "micronaut-data" }
 micronaut-data-tx = { group = "io.micronaut.data", name = "micronaut-data-tx", version.ref = "micronaut-data" }
 
@@ -103,9 +112,11 @@ jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
 
 # PostgreSQL 驱动
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgre" }
+postgresql-r2dbc = { group = "org.postgresql", name = "r2dbc-postgresql", version.ref = "postgre-r2dbc" }
 
 # Jakarta Validation
 jakarta-validation = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakarta-validation" }
 
-
-
+# Kotlinx Coroutine
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }

@@ -7,9 +7,9 @@ version = "0.0.1"
 
 dependencies {
     api(libs.micronaut.data.runtime)
-    implementation(libs.micronaut.data.jdbc)
-    implementation(libs.micronaut.data.tx)
-    implementation(libs.micronaut.jdbc.hikari)
+    api(libs.micronaut.data.r2dbc)
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.reactor)
 
     api(project(":kot-framework:kot-common-model"))
 }

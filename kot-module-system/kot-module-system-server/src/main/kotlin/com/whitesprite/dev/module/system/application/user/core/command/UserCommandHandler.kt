@@ -17,7 +17,7 @@ open class UserCommandHandler(
     private val currentLoginUserProvider: CurrentLoginUserProvider,
 ) {
     @Transactional
-    open fun handle(command: CreateUserCommand): Long? {
+    open suspend fun handle(command: CreateUserCommand): Long? {
         if (adminUserRepository.existsByUsername(command.name)) {
             throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_USERNAME_EXISTS)
         }
@@ -48,20 +48,20 @@ open class UserCommandHandler(
     }
 
     @Transactional
-    open fun handle(command: DeleteUserCommand) {
+    open suspend fun handle(command: DeleteUserCommand) {
         if (!adminUserRepository.existsById(command.id)) return
         adminUserRepository.deleteById(command.id)
     }
 
     @Transactional
-    open fun handle(command: BatchDeleteUserCommand) {
+    open suspend fun handle(command: BatchDeleteUserCommand) {
         if (!command.ids.isEmpty()) {
             adminUserRepository.batchDelete(command.ids)
         }
     }
 
     @Transactional
-    open fun handle(command: UpdateUserCommand): AdminUser {
+    open suspend fun handle(command: UpdateUserCommand): AdminUser {
         val entity = adminUserRepository.findById(command.id)
             ?: throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_NOT_EXISTS)
         val updated = entity.copy(username = command.name)

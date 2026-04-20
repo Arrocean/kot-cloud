@@ -41,7 +41,7 @@ open class AdminAuthControllerV1(
      */
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Post("/login")
-    open fun login(@Body @Valid req: AdminLoginRequest): CommonResult<AdminLoginResponse> {
+    open suspend fun login(@Body @Valid req: AdminLoginRequest): CommonResult<AdminLoginResponse> {
         return success(authAppService.login(req))
     }
 

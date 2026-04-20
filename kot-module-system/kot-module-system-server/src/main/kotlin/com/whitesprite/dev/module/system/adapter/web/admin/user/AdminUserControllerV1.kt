@@ -35,7 +35,7 @@ open class AdminUserControllerV1(
      */
     @Post
     @Status(HttpStatus.CREATED)
-    open fun create(@Body @Valid req: CreateUserRequest): CommonResult<Long?> {
+    open suspend fun create(@Body @Valid req: CreateUserRequest): CommonResult<Long?> {
         return success(userService.create(req))
     }
 
@@ -58,7 +58,7 @@ open class AdminUserControllerV1(
      */
     @Delete("/{id}")
     @Status(HttpStatus.NO_CONTENT)
-    open fun delete(@PathVariable id: Long) {
+    open suspend fun delete(@PathVariable id: Long) {
         userService.delete(id)
     }
 
@@ -68,7 +68,7 @@ open class AdminUserControllerV1(
      * @param ids 用户 ID 列表
      */
     @Delete("/batch/{ids}")
-    open fun batchDelete(@PathVariable ids: List<Long>) {
+    open suspend fun batchDelete(@PathVariable ids: List<Long>) {
         userService.batchDelete(ids)
     }
 
@@ -80,7 +80,7 @@ open class AdminUserControllerV1(
      * @return 更新成功的用户信息
      */
     @Put("/{id}")
-    open fun update(
+    open suspend fun update(
         @PathVariable id: Long,
         @Body @Valid req: UpdateUserRequest
     ): CommonResult<GetAdminUserResponse> {
@@ -95,7 +95,7 @@ open class AdminUserControllerV1(
      * @return 用户信息
      */
     @Get("/{id}")
-    open fun getById(@PathVariable id: Long): CommonResult<GetAdminUserResponse?> {
+    open suspend fun getById(@PathVariable id: Long): CommonResult<GetAdminUserResponse?> {
         val domainUser = userService.getById(id)
         val resp = domainUser?.let { AdminUserAssembler.toGetAdminUserResponse(it) }
         return success(resp)
@@ -110,7 +110,7 @@ open class AdminUserControllerV1(
      * @return 用户列表
      */
     @Get
-    open fun page(
+    open suspend fun page(
         @QueryValue(defaultValue = "1") pageNo: Int,
         @QueryValue(defaultValue = "10") pageSize: Int,
         @QueryValue(defaultValue = "") keyword: String

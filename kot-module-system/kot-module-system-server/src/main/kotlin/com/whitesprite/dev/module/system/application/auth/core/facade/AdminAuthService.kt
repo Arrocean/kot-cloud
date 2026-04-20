@@ -1,11 +1,14 @@
 package com.whitesprite.dev.module.system.application.auth.core.facade
 
 import com.whitesprite.dev.framework.common.enums.CommonStatusEnum
+import com.whitesprite.dev.framework.common.enums.CommonUserTypeEnum
 import com.whitesprite.dev.framework.common.enums.isDisable
 import com.whitesprite.dev.framework.common.exception.ServiceException
 import com.whitesprite.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.whitesprite.dev.framework.security.core.context.CurrentLoginUserProvider
+import com.whitesprite.dev.framework.security.core.context.LoginUser
 import com.whitesprite.dev.framework.security.core.password.PasswordEncoder
+import com.whitesprite.dev.framework.security.core.token.TokenService
 import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminAuthAssembler
 import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminAuthProfileResponse
 import com.whitesprite.dev.module.system.adapter.web.admin.auth.AdminLoginRequest
@@ -18,6 +21,8 @@ import com.whitesprite.dev.module.system.constants.user.UserErrorCodeConstants.U
 import com.whitesprite.dev.module.system.domain.user.model.AdminUser
 import com.whitesprite.dev.module.system.enums.logger.LoginLogTypeEnum
 import jakarta.inject.Singleton
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * 后台管理端认证应用服务。
@@ -32,13 +37,14 @@ import jakarta.inject.Singleton
 open class AdminAuthService(
     private val currentLoginUserProvider: CurrentLoginUserProvider,
     private val userQueryHandler: UserQueryHandler,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val tokenService: TokenService,
 ) {
 
     /**
      * 管理员登录。
      */
-    open fun login(req: AdminLoginRequest): AdminLoginResponse {
+    open suspend fun login(req: AdminLoginRequest): AdminLoginResponse {
         // 校验验证码
         // TODO varifyCaptcha(req.captchaCode)
 
@@ -52,11 +58,11 @@ open class AdminAuthService(
 //        }
 
         // 创建Token，记录登录日志
-//        return createTokenAfterLoginSuccess()
+        return createTokenAfterLoginSuccess(user, req)
 
-        throw ServiceExceptionFactory.notImplemented(
-            "管理员登录链路待实现：后续补充用户校验、密码比对与 Token 签发"
-        )
+//        throw ServiceExceptionFactory.notImplemented(
+//            "管理员登录链路待实现：后续补充用户校验、密码比对与 Token 签发"
+//        )
     }
 
     /**
@@ -85,7 +91,7 @@ open class AdminAuthService(
      * @return 认证成功的用户信息
      * @throws ServiceException 用户不存在、密码错误或账号被禁用时抛出相应异常
      */
-    open fun authenticate(username: String, password: String): AdminUser {
+    open suspend fun authenticate(username: String, password: String): AdminUser {
         val logTypeEnum = LoginLogTypeEnum.LOGIN_PASSWORD
         // 获取用户
         val user = userQueryHandler.handle(GetUserByUsernameQuery(username))
@@ -125,5 +131,41 @@ open class AdminAuthService(
 //            userService.updateUserLogin(userId, ServletUtils.getClientIP())
 //        }
 //    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    private suspend fun createTokenAfterLoginSuccess(user: AdminUser, req: AdminLoginRequest): AdminLoginResponse{
+        // 插入登录日志
+        // TODO createLoginLog(user.id, req.username, logTypeEnum, loginResult.SUCCESS)
+
+        // 生成会话 ID
+        val sessionId = Uuid.random().toString()
+
+        // 解析 scopes
+        // TODO WhiteSprite：后续补充用户权限查询逻辑，目前先写死一个 admin 权限
+        val scopes = setOf("admin")
+
+        // 构造 LoginUser 对象
+        val loginUser = LoginUser(
+            id = user.id,
+            userType = CommonUserTypeEnum.ADMIN,
+            username = user.username,
+            nickname = user.nickname,
+            deptId = user.deptId,
+            email = user.email,
+            mobile = user.mobile,
+            tenantId = user.tenantId,
+            scopes = scopes,
+            sessionId = sessionId
+        )
+
+        val accessToken = tokenService.generateAccessToken(loginUser)
+
+        return AdminLoginResponse(
+            accessToken = accessToken,
+            tokenType = "Bearer",
+            expiresInSeconds = 86400,
+            sessionId = sessionId
+        )
+    }
 }
 

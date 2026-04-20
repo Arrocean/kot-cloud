@@ -6,6 +6,6 @@ group = "com.whitesprite.dev"
 version = "0.0.1"
 
 dependencies {
-    api(libs.postgresql)
+    api(libs.postgresql.r2dbc)
     api(project(":kot-framework:kot-micronaut-starter-md-core"))
 }

@@ -22,7 +22,7 @@ import jakarta.inject.Singleton
 open class AdminUserAppService(
     private val commandHandler: UserCommandHandler,
     private val queryHandler: UserQueryHandler
-){
+) {
 
     private val log = KotlinLogging.logger {}
 
@@ -31,7 +31,7 @@ open class AdminUserAppService(
      * @param req 创建用户请求
      * @return 创建成功的用户 ID
      */
-    fun create(req: CreateUserRequest): Long? {
+    suspend fun create(req: CreateUserRequest): Long? {
         val cmd = CreateUserCommand.fromRequest(req)
         return commandHandler.handle(cmd)
     }
@@ -43,6 +43,7 @@ open class AdminUserAppService(
         if (reqs.isEmpty()) {
             return emptyList()
         }
+        TODO("批量创建用户尚未实现")
         throw ServiceExceptionFactory.exception(GlobalErrorCodeConstants.NOT_IMPLEMENTED)
     }
 
@@ -50,14 +51,14 @@ open class AdminUserAppService(
      * 删除用户
      * @param id 用户 ID
      */
-    fun delete(id: Long) {
+    suspend fun delete(id: Long) {
         commandHandler.handle(DeleteUserCommand.fromId(id))
     }
 
     /**
      * 批量删除用户
      */
-    fun batchDelete(ids: List<Long>) {
+    suspend fun batchDelete(ids: List<Long>) {
         commandHandler.handle(BatchDeleteUserCommand.fromIds(ids))
     }
 
@@ -67,7 +68,7 @@ open class AdminUserAppService(
      * @param req 更新用户请求
      * @return 更新成功的用户信息
      */
-    fun update(
+    suspend fun update(
         id: Long,
         req: UpdateUserRequest
     ): AdminUser {
@@ -80,14 +81,14 @@ open class AdminUserAppService(
      * @param id 用户 ID
      * @return 用户信息
      */
-    fun getById(id: Long): AdminUser? {
+    suspend fun getById(id: Long): AdminUser? {
         return queryHandler.handle(GetUserQuery.fromId(id))
     }
 
     /**
      * 根据用户名查询用户
      */
-    fun getByUsername(username: String): AdminUser? {
+    suspend fun getByUsername(username: String): AdminUser? {
         return queryHandler.handle(GetUserByUsernameQuery(username))
     }
 
@@ -96,7 +97,7 @@ open class AdminUserAppService(
      * @param keyword 关键字
      * @return 用户列表
      */
-    fun list(keyword: String): List<AdminUser> {
+    suspend fun list(keyword: String): List<AdminUser> {
         return queryHandler.handle(ListUserQuery.fromKeyword(keyword))
     }
 
@@ -107,7 +108,7 @@ open class AdminUserAppService(
      * @param keyword 关键字
      * @return 用户列表
      */
-    fun page(
+    suspend fun page(
         pageNo: Int,
         pageSize: Int,
         keyword: String

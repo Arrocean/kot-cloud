@@ -9,6 +9,9 @@ import com.whitesprite.dev.module.system.infrastructure.persistence.mapper.user.
 import com.whitesprite.dev.module.system.infrastructure.persistence.postgresql.user.AdminUserEntityRepository
 import io.micronaut.data.model.Pageable
 import jakarta.inject.Singleton
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 
 @Singleton
 class AdminUserRepositoryPgImpl(
@@ -20,7 +23,7 @@ class AdminUserRepositoryPgImpl(
      * @param user 用户草稿
      * @return 用户
      */
-    override fun save(user: AdminUserDraft): AdminUser {
+    override suspend fun save(user: AdminUserDraft): AdminUser {
         val entity = AdminUserMapper.toEntity(user)
         return AdminUserMapper.toDomain(entityRepo.save(entity))
     }
@@ -29,7 +32,7 @@ class AdminUserRepositoryPgImpl(
      * 删除用户
      * @param id 用户ID
      */
-    override fun deleteById(id: Long) {
+    override suspend fun deleteById(id: Long) {
         entityRepo.deleteById(id)
     }
 
@@ -38,7 +41,7 @@ class AdminUserRepositoryPgImpl(
      *
      * @param ids 用户ID列表
      */
-    override fun batchDelete(ids: List<Long>) {
+    override suspend fun batchDelete(ids: List<Long>) {
         entityRepo.deleteByIdInList(ids)
     }
 
@@ -47,7 +50,7 @@ class AdminUserRepositoryPgImpl(
      * @param user 用户
      * @return 用户
      */
-    override fun update(user: AdminUser): AdminUser {
+    override suspend fun update(user: AdminUser): AdminUser {
         val entity = AdminUserMapper.toEntity(user)
         return AdminUserMapper.toDomain(entityRepo.save(entity))
     }
@@ -57,7 +60,7 @@ class AdminUserRepositoryPgImpl(
      * @param username 用户名
      * @return 是否存在
      */
-    override fun existsByUsername(username: String): Boolean {
+    override suspend fun existsByUsername(username: String): Boolean {
         return entityRepo.existsByUsername(username)
     }
 
@@ -66,7 +69,7 @@ class AdminUserRepositoryPgImpl(
      * @param id 用户ID
      * @return 存在返回true
      */
-    override fun existsById(id: Long): Boolean {
+    override suspend fun existsById(id: Long): Boolean {
         return entityRepo.existsById(id)
     }
 
@@ -75,21 +78,19 @@ class AdminUserRepositoryPgImpl(
      * @param id 用户ID
      * @return 用户
      */
-    override fun findById(id: Long): AdminUser? {
-        return entityRepo.findById(id).map(AdminUserMapper::toDomain)
-            .orElse(null)
+    override suspend fun findById(id: Long): AdminUser? {
+        return entityRepo.findById(id)?.let(AdminUserMapper::toDomain)
     }
 
-    override fun findByUsername(username: String): AdminUser? {
-        return entityRepo.findByUsername(username).map(AdminUserMapper::toDomain)
-            .orElse(null)
+    override suspend fun findByUsername(username: String): AdminUser? {
+        return entityRepo.findByUsername(username)?.let(AdminUserMapper::toDomain)
     }
 
     /**
      * 查询所有用户
      * @return 用户列表
      */
-    override fun findAll(): List<AdminUser> {
+    override suspend fun findAll(): List<AdminUser> {
         return entityRepo.findAll().map(AdminUserMapper::toDomain).toList()
     }
 
@@ -98,7 +99,7 @@ class AdminUserRepositoryPgImpl(
      * @param name 昵称
      * @return 用户列表
      */
-    override fun findByNicknameIlike(name: String): List<AdminUser> {
+    override suspend fun findByNicknameIlike(name: String): List<AdminUser> {
         return entityRepo.findByNicknameIlike(name).map(AdminUserMapper::toDomain).toList()
     }
 
@@ -109,7 +110,7 @@ class AdminUserRepositoryPgImpl(
      * @param pageSize 页大小
      * @return 用户列表
      */
-    override fun findByPage(pageNo: Int, pageSize: Int): PageResult<AdminUser> {
+    override suspend fun findByPage(pageNo: Int, pageSize: Int): PageResult<AdminUser> {
         return entityRepo.findAll(Pageable.from(pageNo - 1, pageSize)).map(AdminUserMapper::toDomain).toPageResult()
     }
 
@@ -120,7 +121,7 @@ class AdminUserRepositoryPgImpl(
      * @param keyword 昵称
      * @return 用户列表
      */
-    override fun findByPage(pageNo: Int, pageSize: Int, keyword: String): PageResult<AdminUser> {
+    override suspend fun findByPage(pageNo: Int, pageSize: Int, keyword: String): PageResult<AdminUser> {
         // 创建分页参数；此处默认从0开始，所以pageNo减1
         val pageable = Pageable.from(pageNo - 1, pageSize)
         return entityRepo.findByNicknameIlike(keyword, pageable).map(AdminUserMapper::toDomain).toPageResult()

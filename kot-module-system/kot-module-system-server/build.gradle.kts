@@ -19,8 +19,6 @@ dependencies {
 
     // Micronaut Data
     api(libs.micronaut.data.runtime)
-    api(libs.micronaut.data.jdbc)
-    api(libs.micronaut.data.tx)
 
     // Micronaut Data Processor
     ksp(libs.micronaut.data.processor)
@@ -29,11 +27,11 @@ dependencies {
     api(libs.micronaut.serde.jackson)
     api(libs.micronaut.jackson.databind)
 
-    // JDBC
-    api(libs.micronaut.jdbc.hikari)
+    // JDBC 连接池
+//    api(libs.micronaut.jdbc.hikari)
 
-    // Postgre SQL
-    runtimeOnly(libs.postgresql)
+    // Postgres SQL
+    runtimeOnly(libs.postgresql.r2dbc)
 
     // Micronaut 注解处理器
     ksp(libs.micronaut.inject.kotlin)

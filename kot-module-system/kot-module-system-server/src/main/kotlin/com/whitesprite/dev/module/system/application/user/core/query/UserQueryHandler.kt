@@ -19,7 +19,7 @@ open class UserQueryHandler(
      * @return 用户
      */
     @ReadOnly
-    open fun handle(query: GetUserQuery): AdminUser? {
+    open suspend fun handle(query: GetUserQuery): AdminUser? {
         return adminUserRepository.findById(query.id)
             ?: throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_NOT_FOUND)
     }
@@ -31,7 +31,7 @@ open class UserQueryHandler(
      * @return 用户
      */
     @ReadOnly
-    open fun handle(query: GetUserByUsernameQuery): AdminUser? {
+    open suspend fun handle(query: GetUserByUsernameQuery): AdminUser? {
         adminUserRepository.existsByUsername(query.username)
         return adminUserRepository.findByUsername(query.username)
             ?: throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_NOT_FOUND)
@@ -44,7 +44,7 @@ open class UserQueryHandler(
      * @return 用户列表
      */
     @ReadOnly
-    open fun handle(query: ListUserQuery): List<AdminUser> {
+    open suspend fun handle(query: ListUserQuery): List<AdminUser> {
         val all = if (query.keyword.isBlank()) {
             adminUserRepository.findAll()
         } else {
@@ -61,7 +61,7 @@ open class UserQueryHandler(
      * @return 用户
      */
     @ReadOnly
-    open fun handle(query: PageListUserQuery): PageResult<AdminUser> {
+    open suspend fun handle(query: PageListUserQuery): PageResult<AdminUser> {
         return if (query.keyword.isBlank()) {
             adminUserRepository.findByPage(query.pageNo, query.pageSize)
         } else {
