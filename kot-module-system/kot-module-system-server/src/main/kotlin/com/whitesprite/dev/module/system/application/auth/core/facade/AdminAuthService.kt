@@ -42,7 +42,10 @@ open class AdminAuthService(
 ) {
 
     /**
-     * 管理员登录。
+     * 处理管理员登录请求。
+     *
+     * @param req [AdminLoginRequest] 对象，包含用户名、密码等信息
+     * @return [AdminLoginResponse] 对象，包含访问令牌、令牌类型以及会话ID等信息
      */
     open suspend fun login(req: AdminLoginRequest): AdminLoginResponse {
         // 校验验证码
@@ -66,7 +69,11 @@ open class AdminAuthService(
     }
 
     /**
-     * 管理员登出。
+     * 使当前登录的管理员用户登出。
+     *
+     * 当前实现为抛出异常，提示该功能尚未完成。未来的实现中，计划引入Redis或会话持久化机制，以及Token黑名单机制来实际处理用户的登出逻辑，包括但不限于撤销会话、使访问令牌失效等操作。
+     *
+     * @throws ServiceException 指示登出功能未实现
      */
     open fun logout() {
         // TODO WhiteSprite：当引入 Redis / 会话持久化或 Token 黑名单后，在这里真正注销登录态
@@ -76,7 +83,11 @@ open class AdminAuthService(
     }
 
     /**
-     * 获取当前登录用户信息。
+     * 获取当前登录用户的详细信息。
+     *
+     * 该方法首先通过[CurrentLoginUserProvider.requireLoginUser]获取当前已登录的用户，然后使用[AdminAuthAssembler.toProfileResponse]将登录用户的信息转换为[AdminAuthProfileResponse]对象返回。如果当前没有用户登录，则会抛出异常。
+     *
+     * @return [AdminAuthProfileResponse] 包含了当前登录用户的ID、用户名、昵称、部门ID、邮箱、手机号、租户ID、授权范围以及会话编号等信息。
      */
     open fun getProfile(): AdminAuthProfileResponse {
         val loginUser = currentLoginUserProvider.requireLoginUser()
@@ -84,12 +95,12 @@ open class AdminAuthService(
     }
 
     /**
-     * 认证用户。
+     * 验证给定的用户名和密码，返回验证通过的用户。
      *
      * @param username 用户名
      * @param password 密码
-     * @return 认证成功的用户信息
-     * @throws ServiceException 用户不存在、密码错误或账号被禁用时抛出相应异常
+     * @return [AdminUser] 对象，表示验证通过的用户
+     * @throws ServiceException 如果用户名不存在、密码错误或账户被禁用，则抛出服务异常
      */
     open suspend fun authenticate(username: String, password: String): AdminUser {
         val logTypeEnum = LoginLogTypeEnum.LOGIN_PASSWORD
@@ -132,6 +143,13 @@ open class AdminAuthService(
 //        }
 //    }
 
+    /**
+     * 在管理员登录成功后创建访问令牌。
+     *
+     * @param user 登录成功的[AdminUser]对象
+     * @param req [AdminLoginRequest]请求对象，包含用户名和密码等信息
+     * @return [AdminLoginResponse]对象，包含生成的访问令牌、令牌类型、过期时间（秒）以及会话ID
+     */
     @OptIn(ExperimentalUuidApi::class)
     private suspend fun createTokenAfterLoginSuccess(user: AdminUser, req: AdminLoginRequest): AdminLoginResponse{
         // 插入登录日志
