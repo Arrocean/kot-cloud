@@ -61,7 +61,7 @@ open class AdminAuthService(
         return createTokenAfterLoginSuccess(user, req)
 
 //        throw ServiceExceptionFactory.notImplemented(
-//            "管理员登录链路待实现：后续补充用户校验、密码比对与 Token 签发"
+//            "管理员登录链路待实现：后续补充用户校验、密码比对于 Token 签发"
 //        )
     }
 
