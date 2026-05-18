@@ -29,8 +29,13 @@ include(":kot-server")
 
 pluginManagement {
     repositories {
+        // 配置阿里云的 Gradle 插件仓库
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
+        // 官方 Gradle 插件仓库
         gradlePluginPortal()
-        maven("https://mirrors.huaweicloud.com/repository/maven/")
+//        maven("https://mirrors.huaweicloud.com/repository/maven/")
+//        maven("https://maven.aliyun.com/repository/public/")
+//        maven("https://mirrors.tencent.com/nexus/repository/maven-public/")
         mavenCentral()
         google()
     }
