@@ -22,6 +22,7 @@ jbcrypt = "0.4"
 # DB
 postgre = "42.7.10"
 postgre-r2dbc = "1.1.1.RELEASE"
+r2dbc-pool = "1.0.2.RELEASE"
 
 # Jakarta 相关
 jakarta-validation = "3.1.1"
@@ -113,6 +114,7 @@ jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
 # PostgreSQL 驱动
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgre" }
 postgresql-r2dbc = { group = "org.postgresql", name = "r2dbc-postgresql", version.ref = "postgre-r2dbc" }
+r2dbc-pool = { group = "io.r2dbc", name = "r2dbc-pool", version.ref = "r2dbc-pool" }
 
 # Jakarta Validation
 jakarta-validation = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakarta-validation" }

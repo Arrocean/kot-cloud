@@ -32,6 +32,7 @@ dependencies {
 
     // Postgres SQL
     runtimeOnly(libs.postgresql.r2dbc)
+    runtimeOnly(libs.r2dbc.pool)
 
     // Micronaut 注解处理器
     ksp(libs.micronaut.inject.kotlin)
