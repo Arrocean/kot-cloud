@@ -53,4 +53,6 @@ dependencies {
     api(project(":kot-framework:kot-micronaut-starter-security"))
     // starter-md-core 模块
     api(project(":kot-framework:kot-micronaut-starter-md-core"))
+    // starter-md-postgresql 模块
+    api(project(":kot-framework:kot-micronaut-starter-md-postgresql"))
 }

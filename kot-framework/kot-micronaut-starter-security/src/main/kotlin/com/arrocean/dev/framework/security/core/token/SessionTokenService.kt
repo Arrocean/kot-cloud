@@ -5,6 +5,7 @@ import com.arrocean.dev.framework.security.config.SecurityProperties
 import com.arrocean.dev.framework.security.core.context.LoginUser
 import io.micronaut.json.JsonMapper
 import io.lettuce.core.RedisClient
+import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Singleton
 import java.security.SecureRandom
 import java.time.Clock
@@ -133,6 +134,7 @@ open class RedisSessionTokenService(
     }
 }
 
+@Serdeable
 private data class RedisSessionTokenRecord(
     val sessionId: String,
     val accessToken: String,

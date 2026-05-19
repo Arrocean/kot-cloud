@@ -8,8 +8,11 @@ version = "0.0.1"
 
 dependencies {
     // Micronaut Http
-//    implementation(libs.micronaut.http)
-//    implementation(libs.micronaut.http.server.netty)
+    implementation(libs.micronaut.http)
+    implementation(libs.micronaut.http.server.netty)
+
+    // Kotlin Logging API
+    implementation(libs.kotlin.logging)
 
     // Micronaut Jackson
     implementation(libs.micronaut.serde.jackson)

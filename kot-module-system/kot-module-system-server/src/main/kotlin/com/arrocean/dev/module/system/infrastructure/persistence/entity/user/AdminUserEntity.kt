@@ -1,6 +1,7 @@
 package com.arrocean.dev.module.system.infrastructure.persistence.entity.user
 
 import com.arrocean.dev.framework.common.core.MDTenantBaseEntity
+import com.arrocean.dev.framework.postgresql.convert.PostgreSqlInetColumn
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
@@ -74,6 +75,7 @@ data class AdminUserEntity(
     /**
      * 最后登录IP
      */
+    @field:PostgreSqlInetColumn
     var loginIp: InetAddress? = null,
 
     /**

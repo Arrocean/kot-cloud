@@ -7,6 +7,8 @@ import com.arrocean.dev.framework.common.poko.success
 import com.arrocean.dev.module.system.application.user.core.facade.AdminUserAppService
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import jakarta.validation.Valid
 
@@ -16,6 +18,7 @@ import jakarta.validation.Valid
  * @author WhiteSprite
  */
 @Validated
+@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller(ApiPrefix.ADMIN_V1 + "/system/users")
 open class AdminUserControllerV1(
     /**
