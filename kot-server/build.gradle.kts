@@ -10,7 +10,7 @@ plugins {
     id("org.graalvm.buildtools.native")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
@@ -52,11 +52,11 @@ configurations.configureEach {
 
 ksp {
     arg("micronaut.processing.incremental", "true")
-    arg("micronaut.processing.annotations", "com.whitesprite.dev.*")
+    arg("micronaut.processing.annotations", "com.arrocean.dev.*")
 }
 
 application {
-    mainClass.set("com.whitesprite.dev.server.KotlinServerApplication")
+    mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
 }
 
 micronaut {
@@ -69,7 +69,7 @@ micronaut {
     processing {
         incremental(true)
         // 默认使用**
-        annotations("com.whitesprite.dev.**")
+        annotations("com.arrocean.dev.**")
     }
 }
 
@@ -77,7 +77,7 @@ graalvmNative {
     binaries {
         named("main") {
             imageName.set("kot-server")
-            mainClass.set("com.whitesprite.dev.server.KotlinServerApplication")
+            mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
             buildArgs.addAll(
                 "-J-Xmx${project.property("native.image.xmx")}",
                 "-J-Xms${project.property("native.image.xms")}",

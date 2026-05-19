@@ -3,7 +3,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
@@ -13,6 +13,7 @@ dependencies {
 
     // Micronaut Jackson
     implementation(libs.micronaut.serde.jackson)
+    implementation(libs.micronaut.jackson.databind)
     ksp(libs.micronaut.jackson.processor)
 
     // Micronaut Security
@@ -22,6 +23,7 @@ dependencies {
     // Password Hash
     implementation(libs.bcprov.jdk18on)
     implementation(libs.jbcrypt)
+    implementation(libs.lettuce.core)
 
     // 注解注入
     implementation(libs.micronaut.runtime)
@@ -32,5 +34,7 @@ dependencies {
     implementation(libs.micronaut.validation)
 
     // Common Model
+    implementation(project(":kot-framework:kot-common-api"))
     api(project(":kot-framework:kot-common-model"))
 }
+
