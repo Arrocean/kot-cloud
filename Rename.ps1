@@ -1,5 +1,6 @@
-#requires -PSEdition Core
-#requires -Version 7.0
+# PowerShell 脚本，用于批量替换文本文件中的包名，并可选地重命名目录结构。
+# requires -PSEdition Core
+# requires -Version 7.0
 
 [CmdletBinding()]
 param(
@@ -11,8 +12,8 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-$OldPackage = "com.whitesprite.dev"
-$NewPackage = "com.arrocean.dev"
+$OldPackage = "com.arrocean.dev"
+$NewPackage = "com.xxx.dev"
 
 $TextFilePatterns = @(
     "*.kt", "*.kts", "*.java",
@@ -65,7 +66,7 @@ function Rename-PackageDirectories {
 
     $targets = Get-ChildItem -Path $BaseDir -Recurse -Directory -ErrorAction SilentlyContinue |
             Where-Object {
-                $_.FullName -match [regex]::Escape((Join-Path (Join-Path "com" "whitesprite") "dev"))
+                $_.FullName -match [regex]::Escape((Join-Path (Join-Path "com" "arrocean") "dev"))
             } |
             Sort-Object { $_.FullName.Length } -Descending
 
@@ -73,8 +74,8 @@ function Rename-PackageDirectories {
         $fullPath = $dir.FullName
 
         $comDir = Split-Path (Split-Path $fullPath -Parent) -Parent
-        $expectedOld = Join-Path $comDir (Join-Path "whitesprite" "dev")
-        $newwhitespriteDir = Join-Path $comDir "arrocean"
+        $expectedOld = Join-Path $comDir (Join-Path "arrocean" "dev")
+        $newwhitespriteDir = Join-Path $comDir "xxx"
         $newDevDir = Join-Path $newwhitespriteDir "dev"
 
         if ($fullPath -ieq $expectedOld) {
@@ -88,7 +89,7 @@ function Rename-PackageDirectories {
                 Write-Warning "目标目录已存在，跳过目录移动：$fullPath -> $newDevDir"
             }
 
-            $oldwhitespriteDir = Join-Path $comDir "whitesprite"
+            $oldwhitespriteDir = Join-Path $comDir "arrocean"
             if ((Test-Path -LiteralPath $oldwhitespriteDir) -and
                     -not (Get-ChildItem -LiteralPath $oldwhitespriteDir -Force -ErrorAction SilentlyContinue)) {
                 Remove-Item -LiteralPath $oldwhitespriteDir -Force
@@ -130,5 +131,5 @@ Write-Host ("已完成文本替换，共修改 {0} 个文件。" -f $changed.Cou
 
 if ($RenameDirectories) {
     Rename-PackageDirectories -BaseDir $Root
-    Write-Host "已尝试重命名目录结构 com\\whitesprite\\dev -> com\\arrocean\\dev"
+    Write-Host "已尝试重命名目录结构 com\\arrocean\\dev -> com\\xxx\\dev"
 }
