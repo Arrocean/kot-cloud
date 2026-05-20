@@ -60,8 +60,8 @@ application {
 }
 
 micronaut {
-    // Micronaut Platform 4.10.7
-    version.set("4.10.7")
+    // Micronaut Platform
+    version.set("5.0.0-RC1")
     importMicronautPlatform.set(true)
 
     runtime("netty")

@@ -98,6 +98,8 @@ micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hik
 bcprov-jdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bcprov" }
 # jBCrypt 密码哈希库
 jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
+
+# Redis 客户端
 lettuce-core = { group = "io.lettuce", name = "lettuce-core", version.ref = "lettuce" }
 
 # Maria DB 驱动
