@@ -62,10 +62,10 @@ open class UserQueryHandler(
      */
     @ReadOnly
     open fun handle(query: PageListUserQuery): PageResult<AdminUser> {
-        return if (query.keyword.isBlank()) {
-            adminUserRepository.findByPage(query.pageNo, query.pageSize)
+        return if (query.keyword.isNullOrEmpty()) {
+            adminUserRepository.findByPage(query.page)
         } else {
-            adminUserRepository.findByPage(query.pageNo, query.pageSize, "%${query.keyword}%")
+            adminUserRepository.findByPage(query.page, "%${query.keyword}%")
         }
     }
 }

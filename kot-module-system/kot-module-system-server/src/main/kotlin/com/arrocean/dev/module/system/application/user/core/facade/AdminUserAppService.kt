@@ -2,6 +2,7 @@ package com.arrocean.dev.module.system.application.user.core.facade
 
 import com.arrocean.dev.framework.common.exception.constants.GlobalErrorCodeConstants
 import com.arrocean.dev.framework.common.exception.util.ServiceExceptionFactory
+import com.arrocean.dev.framework.common.poko.PageParam
 import com.arrocean.dev.framework.common.poko.PageResult
 import com.arrocean.dev.module.system.adapter.web.admin.user.CreateUserRequest
 import com.arrocean.dev.module.system.adapter.web.admin.user.UpdateUserRequest
@@ -102,17 +103,15 @@ open class AdminUserAppService(
 
     /**
      * 分页查询用户
-     * @param pageNo 页码
-     * @param pageSize 页大小
+     * @param page 分页参数
      * @param keyword 关键字
      * @return 用户列表
      */
     fun page(
-        pageNo: Int,
-        pageSize: Int,
-        keyword: String
+        page: PageParam,
+        keyword: String?
     ): PageResult<AdminUser> {
-        return queryHandler.handle(PageListUserQuery.fromPageNoAndPageSize(pageNo, pageSize, keyword))
+        return queryHandler.handle(PageListUserQuery.fromPage(page, keyword))
     }
 
     /**

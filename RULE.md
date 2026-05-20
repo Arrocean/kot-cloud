@@ -1,73 +1,79 @@
-# 项目编码规范（Project Code Style） - For Future Coder
+# Project Coding Guidelines
 
-## 1. 代码风格
+This document is the English version of `RULE.md` and is intended for future contributors to this project.
 
-### 1.1 命名规范
-- 类名：采用大驼峰命名法（PascalCase），如 `UserService`
-- 方法名和变量名：采用小驼峰命名法（camelCase），如 `getUserInfo`
-- 常量：全部大写，单词间用下划线分隔（SCREAMING_SNAKE_CASE），如 `MAX_CONNECTION_COUNT`
-- 包名：全部小写，多单词用点分隔，如 `com.example.project.module`
+## 1. Code Style
 
-### 1.2 代码格式
-- 缩进：使用4个空格字符，不使用Tab
-- 行长度：最大120个字符
-- 空行：类、方法之间使用空行分隔
-- 空格：运算符、关键字前后使用空格
+### 1.1 Naming Conventions
+- Class names: Use PascalCase, for example `UserService`
+- Method names and variable names: Use camelCase, for example `getUserInfo`
+- Constants: Use SCREAMING_SNAKE_CASE, for example `MAX_CONNECTION_COUNT`
+- Package names: Use lowercase letters only, with words separated by dots, for example `com.example.project.module`
 
-## 2. 注释规范
+### 1.2 Formatting Rules
+- Indentation: Use 4 spaces; do not use tabs
+- Line length: Keep each line within 120 characters
+- Blank lines: Use blank lines to separate classes and methods
+- Spacing: Add spaces around operators and after keywords where appropriate
 
-### 2.1 类注释
-```
+## 2. Comment Guidelines
+
+### 2.1 Class Comments
+```java
 /**
- * 类功能描述
- * @author 作者
- * @date 创建日期
+ * Description of the class responsibility
+ * @author Author
+ * @date Creation date
  */
 ```
 
-### 2.2 方法注释
-```
+### 2.2 Method Comments
+```java
 /**
- * 方法功能描述
- * @param 参数名 参数描述
- * @return 返回值描述
- * @throws 异常类型 异常描述
+ * Description of the method behavior
+ * @param parameterName Description of the parameter
+ * @return Description of the return value
+ * @throws ExceptionType Description of the exception
  */
 ```
 
-### 2.3 行内注释
-- 使用 `//` 进行行内注释
-- 注释应简洁明了，解释复杂逻辑
+### 2.3 Inline Comments
+- Use `//` for inline comments
+- Keep comments concise and easy to understand
+- Use comments to explain non-obvious or complex logic instead of restating the code
 
-## 3. 代码结构
+## 3. Code Structure
 
-### 3.1 类结构
-- 成员变量 -> 构造函数 -> 公共方法 -> 私有方法
-- 按功能模块对方法进行分组
+### 3.1 Class Layout
+- Organize class members in the following order:
+  member variables -> constructors -> public methods -> private methods
+- Group related methods by feature or responsibility
 
-### 3.2 方法长度
-- 单个方法不超过50行
-- 复杂逻辑应拆分为多个小方法
+### 3.2 Method Size
+- A single method should not exceed 50 lines whenever possible
+- Break complex logic into smaller, focused helper methods
 
-## 4. 错误处理
+## 4. Error Handling
 
-### 4.1 异常处理
-- 
+### 4.1 Exception Handling
+- Handle exceptions explicitly and avoid swallowing them silently
+- Provide clear and actionable error messages
+- Use specific exception types whenever possible instead of overly broad catches
 
-## 5. 测试规范
+## 5. Testing Guidelines
 
-### 5.1 单元测试
-- 每个公共方法应有对应的单元测试
-- 测试用例应覆盖正常和异常情况
-- 使用有意义的测试方法名
+### 5.1 Unit Tests
+- Each public method should have a corresponding unit test
+- Test cases should cover both normal scenarios and exceptional scenarios
+- Use meaningful and descriptive test method names
 
-## 6. 提交规范
+## 6. Commit Guidelines
 
-### 6.1 Git提交信息
-- feat: 新功能
-- fix: 修复bug
-- docs: 文档更新
-- style: 代码格式调整
-- refactor: 重构
-- test: 测试相关
-- chore: 构建过程或辅助工具的变动
+### 6.1 Git Commit Message Types
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation update
+- `style`: Code formatting changes
+- `refactor`: Refactoring
+- `test`: Test-related changes
+- `chore`: Changes to the build process or supporting tools

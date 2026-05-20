@@ -1,13 +1,14 @@
 package com.arrocean.dev.module.system.infrastructure.persistence.repositoryimpl.postgresql
 
+import com.arrocean.dev.framework.common.poko.PageParam
 import com.arrocean.dev.framework.common.poko.PageResult
 import com.arrocean.dev.framework.core.toPageResult
+import com.arrocean.dev.framework.core.toPageResultTotalEqualsSize
 import com.arrocean.dev.module.system.domain.user.model.AdminUser
 import com.arrocean.dev.module.system.domain.user.model.AdminUserDraft
 import com.arrocean.dev.module.system.domain.user.repository.AdminUserRepository
 import com.arrocean.dev.module.system.infrastructure.persistence.mapper.user.AdminUserMapper
 import com.arrocean.dev.module.system.infrastructure.persistence.postgresql.user.AdminUserEntityRepository
-import io.micronaut.data.model.Pageable
 import jakarta.inject.Singleton
 
 @Singleton
@@ -105,25 +106,29 @@ class AdminUserRepositoryPgImpl(
     /**
      * 分页查询所有用户
      *
-     * @param pageNo 页码
-     * @param pageSize 页大小
+     * @param page 分页参数
      * @return 用户列表
      */
-    override fun findByPage(pageNo: Int, pageSize: Int): PageResult<AdminUser> {
-        return entityRepo.findAll(Pageable.from(pageNo - 1, pageSize)).map(AdminUserMapper::toDomain).toPageResult()
+    override fun findByPage(page: PageParam): PageResult<AdminUser> {
+        return if (page.isNoPage()) {
+            entityRepo.findAll().map(AdminUserMapper::toDomain).toList().toPageResultTotalEqualsSize()
+        } else {
+            entityRepo.findAll(page.toPageable()).map(AdminUserMapper::toDomain).toPageResult()
+        }
     }
 
     /**
      * 分页列表查询用户 + 根据昵称查询
-     * @param pageNo 页码
-     * @param pageSize 页大小
+     * @param page 分页参数
      * @param keyword 昵称
      * @return 用户列表
      */
-    override fun findByPage(pageNo: Int, pageSize: Int, keyword: String): PageResult<AdminUser> {
-        // 创建分页参数；此处默认从0开始，所以pageNo减1
-        val pageable = Pageable.from(pageNo - 1, pageSize)
-        return entityRepo.findByNicknameIlike(keyword, pageable).map(AdminUserMapper::toDomain).toPageResult()
+    override fun findByPage(page: PageParam, keyword: String): PageResult<AdminUser> {
+        return if (page.isNoPage()) {
+            entityRepo.findByNicknameIlike(keyword).map(AdminUserMapper::toDomain).toList().toPageResultTotalEqualsSize()
+        } else {
+            entityRepo.findByNicknameIlike(keyword, page.toPageable()).map(AdminUserMapper::toDomain).toPageResult()
+        }
     }
 
 }

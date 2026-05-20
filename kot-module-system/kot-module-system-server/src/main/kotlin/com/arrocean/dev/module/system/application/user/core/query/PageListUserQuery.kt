@@ -1,13 +1,14 @@
 package com.arrocean.dev.module.system.application.user.core.query
 
+import com.arrocean.dev.framework.common.poko.PageParam
+
 class PageListUserQuery(
-    val pageNo: Int,
-    val pageSize: Int,
-    val keyword: String = ""
+    val page: PageParam,
+    val keyword: String?
 ) {
     companion object {
-        fun fromPageNoAndPageSize(pageNo: Int, pageSize: Int, keyword: String = ""): PageListUserQuery {
-            return PageListUserQuery(pageNo, pageSize, keyword)
+        fun fromPage(page: PageParam, keyword: String?): PageListUserQuery {
+            return PageListUserQuery(page, keyword)
         }
     }
 }

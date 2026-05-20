@@ -16,6 +16,7 @@ dependencies {
 
     // Micronaut Validation
     api(libs.micronaut.validation)
+    ksp(libs.micronaut.validation.processor)
 
     // Micronaut Data
     api(libs.micronaut.data.runtime)

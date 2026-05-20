@@ -107,18 +107,15 @@ open class AdminUserControllerV1(
     /**
      * 分页查询用户
      *
-     * @param pageNo 页码
-     * @param pageSize 页大小
-     * @param keyword 关键字
+     * @param query 查询条件
      * @return 用户列表
      */
     @Get
     open fun page(
-        @QueryValue(defaultValue = "1") pageNo: Int,
-        @QueryValue(defaultValue = "10") pageSize: Int,
-        @QueryValue(defaultValue = "") keyword: String
+        @RequestBean @Valid query: PageAdminUserRequest
     ): CommonResult<PageResult<GetAdminUserResponse>> {
-        val domainUsers = userService.page(pageNo, pageSize, keyword)
+        val page = query.toPageParam()
+        val domainUsers = userService.page(page, query.keyword)
         val resp = domainUsers.list.map { AdminUserAssembler.toGetAdminUserResponse(it) }
         return success(PageResult(domainUsers.total, resp))
     }

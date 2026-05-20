@@ -5,6 +5,7 @@ import com.arrocean.dev.framework.common.exception.ServiceException
 import com.arrocean.dev.framework.common.exception.constants.GlobalErrorCodeConstants
 import com.arrocean.dev.framework.common.poko.CommonResult
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.micronaut.context.annotation.Replaces
 import io.micronaut.core.bind.exceptions.UnsatisfiedArgumentException
 import io.micronaut.core.convert.exceptions.ConversionErrorException
 import io.micronaut.http.HttpRequest
@@ -12,8 +13,12 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.codec.CodecException
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.http.server.exceptions.ConversionErrorHandler
 import io.micronaut.http.server.exceptions.ExceptionHandler
+import io.micronaut.http.server.exceptions.UnsatisfiedArgumentHandler
+import io.micronaut.http.server.exceptions.UnsatisfiedRouteHandler
 import io.micronaut.json.JsonSyntaxException
+import io.micronaut.validation.exceptions.ConstraintExceptionHandler
 import io.micronaut.web.router.exceptions.UnsatisfiedRouteException
 import jakarta.inject.Singleton
 import jakarta.validation.ConstraintViolationException
@@ -123,6 +128,7 @@ class ServiceExceptionHandler :
 }
 
 @Singleton
+@Replaces(ConstraintExceptionHandler::class)
 class ValidationExceptionHandler :
     ExceptionHandler<ConstraintViolationException, HttpResponse<CommonResult<Nothing>>> {
 
@@ -140,6 +146,7 @@ class ValidationExceptionHandler :
 }
 
 @Singleton
+@Replaces(UnsatisfiedRouteHandler::class)
 class UnsatisfiedRouteExceptionHandler :
     ExceptionHandler<UnsatisfiedRouteException, HttpResponse<CommonResult<Nothing>>> {
 
@@ -157,6 +164,7 @@ class UnsatisfiedRouteExceptionHandler :
 }
 
 @Singleton
+@Replaces(UnsatisfiedArgumentHandler::class)
 class UnsatisfiedArgumentExceptionHandler :
     ExceptionHandler<UnsatisfiedArgumentException, HttpResponse<CommonResult<Nothing>>> {
 
@@ -174,6 +182,7 @@ class UnsatisfiedArgumentExceptionHandler :
 }
 
 @Singleton
+@Replaces(ConversionErrorHandler::class)
 class ConversionErrorExceptionHandler :
     ExceptionHandler<ConversionErrorException, HttpResponse<CommonResult<Nothing>>> {
 

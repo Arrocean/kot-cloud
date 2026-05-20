@@ -1,6 +1,8 @@
 package com.arrocean.dev.framework.common.poko
 
 import com.arrocean.dev.framework.common.validation.PageSizeOrNoPage
+import io.micronaut.data.model.Pageable
+import io.micronaut.serde.annotation.Serdeable
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 
@@ -14,10 +16,24 @@ data class PageParam(
     @field:Min(value = 1L)
     val pageNo: Int = DEFAULT_PAGE_NO,
 
-    @field:Min(value = 1L)
     @field:PageSizeOrNoPage(max = MAX_PAGE_SIZE)
     val pageSize: Int = DEFAULT_PAGE_SIZE
 ) {
+    fun isNoPage(): Boolean = pageSize == NO_PAGE
+
+    fun toPageable(): Pageable {
+        require(pageNo >= DEFAULT_PAGE_NO) { "pageNo 必须大于等于 $DEFAULT_PAGE_NO" }
+        require(isNoPage() || pageSize in DEFAULT_PAGE_NO..MAX_PAGE_SIZE) {
+            "pageSize 必须是 $NO_PAGE（不分页）或在 $DEFAULT_PAGE_NO 到 $MAX_PAGE_SIZE 之间"
+        }
+
+        return if (isNoPage()) {
+            Pageable.unpaged()
+        } else {
+            Pageable.from(pageNo - 1, pageSize)
+        }
+    }
+
     companion object {
         /**
          * 默认页码
@@ -65,6 +81,7 @@ data class SortablePageParam(
     val pageSize: Int get() = page.pageSize
 }
 
+@Serdeable
 data class PageResult<T>(
     val total: Long,
     val list: List<T>

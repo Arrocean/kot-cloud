@@ -1,76 +1,94 @@
 # kot-cloud
 
-#### 介绍
+#### Introduction
 
-该项目旨在尝试构建一个以Kotlin为基本语言的企业级项目后端脚手架。在构建过程中也是本人学习Kotlin的一个过程
+This project aims to attempt building an enterprise-level project backend scaffolding using Kotlin as the basic
+language. The construction process is also a learning process for me in Kotlin
 
-#### 说明
+#### Description
 
-该项目旨在构建一个基于 Kotlin 的企业级微服务脚手架，目标是在功能上对标 SpringCloudAlibaba + SpringBoot + Maven +
-MybatisPlus + JVM 生态，同时利用 Kotlin 与 GraalVM 的特性，尽可能提升 CPU 效率并优化内存占用。
+This project aims to build an enterprise-level microservices scaffolding based on Kotlin, with the goal of functionally
+aligning with SpringCloudAlibaba + SpringBoot + Maven +
+The MybatisPlus + JVM ecosystem leverages the features of Kotlin and GraalVM to maximize CPU efficiency and optimize
+memory usage.
 
-项目定位为企业级模板与参考实现，包含常用的模块划分（公共工具、数据库、Web 层、管理端服务、可选网关），便于在生产级项目中直接复用或作为二次开发基础。
+The project is positioned as an enterprise-level template and reference implementation, encompassing commonly used
+module divisions (public tools, databases, web tier, management-side services, and optional gateways), facilitating
+direct reuse or serving as a foundation for secondary development in production-level projects.
 
-由于该项目目前长期处在本人的学习项目中，因此在功能上，该项目会尝试较为激进的技术选型方案，可能会在后续的开发过程中进行调整和优化，以确保最终产出的脚手架能够满足企业级项目的需求，同时也能充分利用
-Kotlin 和 GraalVM 的优势。
+Since this project is currently a long-term part of my learning projects, it will attempt a more aggressive technology
+selection plan in terms of functionality. Adjustments and optimizations may be made during the subsequent development
+process to ensure that the final scaffolding output meets the needs of enterprise-level projects while also being fully
+utilized
+The advantages of Kotlin and GraalVM.
 
-#### 软件架构
+#### Software architecture
 
-软件架构说明
+Software architecture description
 
-本项目致力于构建一个现代化、高性能的微服务架构体系，技术选型如下：
+This project is dedicated to building a modern, high-performance microservices architecture system, with the following
+technical choices:
 
-**核心语言**:
+**Core language**:
 
-- [Kotlin](https://kotlinlang.org/) 2.3.20 - 作为主要开发语言，充分利用其空安全、扩展函数、协程等特性提高开发效率和代码质量
+- [Kotlin](https://kotlinlang.org/) 2.3.20 - As the primary development language, fully leverage its features such as
+  null safety, extension functions, and coroutines to enhance development efficiency and code quality
 
-**核心框架**:
+**Core framework**:
 
-- [Micronaut](https://micronaut.io/) - 选择此框架是因为它具有快速启动、低内存占用的特点，特别适合微服务和云原生应用，与Spring
-  Boot相比在性能上有显著优势
+- [Micronaut](https://micronaut.io/) - This framework was chosen because it boasts quick startup and low memory
+  consumption, making it particularly suitable for microservices and cloud-native applications, and is compatible with
+  Spring
+  Boot has significant advantages in performance compared to others
 
-**构建工具**:
+**Build tools**:
 
-- [Gradle](https://gradle.org/) - 使用Kotlin DSL作为构建脚本语言，提供更好的IDE支持和类型安全性
+- [Gradle](https://gradle.org/) - Uses Kotlin DSL as the build script language, providing better IDE support and type
+  safety
 
-**编译优化**:
+**Compilation optimization**:
 
-- [GraalVM](https://www.graalvm.org/) - 用于将应用编译为原生镜像，极大减少启动时间和内存消耗，充分发挥Kotlin的优势
+- [GraalVM](https://www.graalvm.org/) - used to compile applications into native images, significantly reducing startup
+  time and memory consumption, and fully leveraging the advantages of Kotlin
 
-**ORM**: 混合使用
+**ORM**: Mixed usage
 
 - [Micronaut Data](https://micronaut-projects.github.io/micronaut-data/latest/guide/) -
-  用于数据访问层，提供类型安全的ORM能力  
-  ~~- [Exposed](https://github.com/JetBrains/Exposed) - 用于关系型数据库访问，提供类型安全的 SQL 构建器~~
-- [Micronaut Data R2DBC](https://micronaut-projects.github.io/micronaut-r2dbc/1.0.x/guide/) - 用于关系型数据库访问，提供异步访问能力
+  Used in the data access layer, it provides type-safe ORM capabilities  
+  ~~- [Exposed](https://github.com/JetBrains/Exposed) - for relational database access, providing a type-safe SQL
+  builder~~
+- [Micronaut Data R2DBC](https://micronaut-projects.github.io/micronaut-r2dbc/1.0.x/guide/) - used for relational
+  database access, providing asynchronous access capabilities
 
-**数据库**:
+database
 
-- [PostgreSQL](https://www.postgresql.org/) - 用于关系型数据库
-- [MariaDB](https://mariadb.org/) - 用于关系型数据库(后续支持)
+- [PostgreSQL](https://www.postgresql.org/) - for relational databases
+- [MariaDB](https://mariadb.org/) - for relational databases (future support)
 
-**插件**:
+**Plugin**:
 
-- [KSP](https://github.com/google/ksp) 2.3.6 - 用于代码生成，提供更快的编译速度和更好的Kotlin支持
+- [KSP](https://github.com/google/ksp) 2.3.6 - used for code generation, offering faster compilation speeds and improved
+  Kotlin support
 - [Micronaut Application](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/) 4.6.2 -
-  用于创建和管理Micronaut应用
+  Used for creating and managing Micronaut applications
 
-#### 临时注意事项
+#### Temporary precautions
 
-如果你需要使用本地配置文件(application.properties)进行开发，请确保在运行环境中添加环境变量 `MICRONAUT_ENVIRONMENTS=local`
-，以便正确加载本地配置文件。
+If you need to use the local configuration file (application.properties) for development, please ensure to add the
+environment variable `MICRONAUT_ENVIRONMENTS=local` in the runtime environment
+so as to correctly load the local configuration file.
 
-#### 安装教程
+#### Installation tutorial
 
-1. 暂无，等待后续完善项目后进行文档完善
+1. Currently, there is no content available. We will improve the documentation after further refining the project
 
-#### 使用说明
+#### Instructions for Use
 
-1. 暂无，等待后续完善项目后进行文档完善
+1. Currently, there is no content available. We will improve the documentation after further refining the project
 
-#### 参与贡献
+#### Participate in contributing
 
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+1. Fork this repository
+2. Create a new Feat_xxx branch
+3. Submit code
+4. Create a new Pull Request

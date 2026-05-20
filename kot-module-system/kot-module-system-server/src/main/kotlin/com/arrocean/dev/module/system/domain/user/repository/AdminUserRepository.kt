@@ -1,5 +1,6 @@
 package com.arrocean.dev.module.system.domain.user.repository
 
+import com.arrocean.dev.framework.common.poko.PageParam
 import com.arrocean.dev.framework.common.poko.PageResult
 import com.arrocean.dev.module.system.domain.user.model.AdminUser
 import com.arrocean.dev.module.system.domain.user.model.AdminUserDraft
@@ -77,20 +78,18 @@ interface AdminUserRepository{
     /**
      * 分页查询所有用户
      *
-     * @param pageNo 页码
-     * @param pageSize 页大小
+     * @param page 分页参数
      * @return 用户列表
      */
-    fun findByPage(pageNo: Int, pageSize: Int): PageResult<AdminUser>
+    fun findByPage(page: PageParam): PageResult<AdminUser>
 
     /**
      * 分页列表查询用户
      *
-     * @param pageNo 页码
-     * @param pageSize 页大小
+     * @param page 分页参数
      * @param keyword 关键字
      * @return 用户列表
      */
-    fun findByPage(pageNo: Int, pageSize: Int, keyword: String): PageResult<AdminUser>
+    fun findByPage(page: PageParam, keyword: String): PageResult<AdminUser>
 
 }

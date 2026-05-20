@@ -1,7 +1,9 @@
 package com.arrocean.dev.module.system.adapter.web.admin.user
 
+import com.arrocean.dev.framework.common.poko.PageParam
+import com.arrocean.dev.framework.common.validation.PageSizeOrNoPage
 import io.micronaut.serde.annotation.Serdeable
-import java.time.Instant
+import jakarta.validation.constraints.Min
 
 /**
  * 创建用户请求
@@ -55,3 +57,19 @@ data class GetAdminUserResponse(
     val createTime: Long,
     val updateTime: Long
 )
+
+/**
+ * 获取分页用户列表
+ */
+@Serdeable
+data class PageAdminUserRequest(
+    @field:Min(1)
+    val pageNo: Int = PageParam.DEFAULT_PAGE_NO,
+
+    @field:PageSizeOrNoPage(max = PageParam.MAX_PAGE_SIZE)
+    val pageSize: Int = PageParam.DEFAULT_PAGE_SIZE,
+
+    val keyword: String?,
+) {
+    fun toPageParam(): PageParam = PageParam(pageNo = pageNo, pageSize = pageSize)
+}
