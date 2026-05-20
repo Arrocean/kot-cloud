@@ -8,16 +8,15 @@ import com.arrocean.dev.framework.common.util.web.WebUtils
 import com.arrocean.dev.framework.security.core.context.LoginUser
 import com.arrocean.dev.framework.security.core.context.CurrentLoginUserProvider
 import com.arrocean.dev.framework.security.core.password.PasswordEncoder
+import com.arrocean.dev.framework.security.core.token.RevokedSessionToken
 import com.arrocean.dev.framework.security.core.token.SessionTokenService
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminAuthAssembler
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminAuthProfileResponse
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminLoginRequest
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminLoginResponse
-import com.arrocean.dev.module.system.adapter.web.admin.user.UpdateUserRequest
 import com.arrocean.dev.module.system.application.log.core.facade.LoginLogService
 import com.arrocean.dev.module.system.application.user.core.command.LoginUserCommand
 import com.arrocean.dev.module.system.application.user.core.command.UserCommandHandler
-import com.arrocean.dev.module.system.application.user.core.facade.AdminUserAppService
 import com.arrocean.dev.module.system.application.user.core.query.GetUserByUsernameQuery
 import com.arrocean.dev.module.system.application.user.core.query.UserQueryHandler
 import com.arrocean.dev.module.system.constants.auth.AuthErrorCodeConstants.AUTH_FORBIDDEN
@@ -25,17 +24,14 @@ import com.arrocean.dev.module.system.constants.auth.AuthErrorCodeConstants.AUTH
 import com.arrocean.dev.module.system.constants.user.UserErrorCodeConstants.USER_NOT_EXISTS
 import com.arrocean.dev.module.system.domain.log.model.LoginLogDraft
 import com.arrocean.dev.module.system.domain.user.model.AdminUser
-import com.arrocean.dev.module.system.domain.user.repository.AdminUserRepository
 import com.arrocean.dev.module.system.enums.logger.LoginLogTypeEnum
 import com.arrocean.dev.module.system.enums.logger.LoginResultEnum
 import io.micronaut.http.HttpHeaders
-import io.micronaut.http.HttpRequest
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
 import java.net.InetAddress
 import java.time.Clock
 import java.time.Instant
-import java.util.UUID
 
 /**
  * 后台管理端认证应用服务。
@@ -80,11 +76,11 @@ open class AdminAuthService(
     /**
      * 管理员登出。
      */
-    open fun logout() {
-        // TODO WhiteSprite：当引入 Redis / 会话持久化或 Token 黑名单后，在这里真正注销登录态
-        throw ServiceExceptionFactory.notImplemented(
-            "管理员登出链路待实现：后续补充会话撤销或 Token 失效处理"
-        )
+    @Transactional
+    open fun logout(logType: LoginLogTypeEnum = LoginLogTypeEnum.LOGOUT_ACTIVE) {
+        val accessToken = resolveBearerTokenFromCurrentRequest() ?: return
+        val revokedSession = sessionTokenService.revokeByAccessToken(accessToken) ?: return
+        createLogoutLog(revokedSession, logType)
     }
 
     /**
@@ -106,10 +102,8 @@ open class AdminAuthService(
     open fun authenticate(username: String, password: String): AdminUser {
         // 获取用户
         val user = userQueryHandler.handle(GetUserByUsernameQuery(username))
-        if (user == null) {
-//            createLoginLog(null, username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+            ?: //            createLoginLog(null, username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
             throw ServiceExceptionFactory.exception(USER_NOT_EXISTS)
-        }
         if (!passwordEncoder.matches(password, user.passwordHash)) {
 //            createLoginLog(user.id, username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
             throw ServiceExceptionFactory.exception(AUTH_PASSWORD_ERROR)
@@ -127,7 +121,7 @@ open class AdminAuthService(
         createLoginLog(loginUser, logType, LoginResultEnum.SUCCESS)
         updateUserLoginIp(user, WebUtils.getClientIP())
         // 生成accessToken
-        val issuedTokens = sessionTokenService.issueTokens(loginUser,"default")
+        val issuedTokens = sessionTokenService.issueTokens(loginUser, "default")
 
 
         return AdminLoginResponse(
@@ -144,7 +138,6 @@ open class AdminAuthService(
         logType: LoginLogTypeEnum,
         logResult: LoginResultEnum
     ) {
-        val now = Instant.now(clock)
         val loginLog = LoginLogDraft(
             logType = logType.type,
 //            traceId = traceId,
@@ -159,6 +152,21 @@ open class AdminAuthService(
         )
         loginLogService.createLoginLog(loginLog)
 
+    }
+
+    private fun createLogoutLog(revokedSession: RevokedSessionToken, logType: LoginLogTypeEnum) {
+        val logoutLog = LoginLogDraft(
+            logType = logType.type,
+            userId = revokedSession.userId,
+            username = revokedSession.username,
+            userType = revokedSession.userType.toShort(),
+            result = LoginResultEnum.SUCCESS.result,
+            failReason = null,
+            userIp = WebUtils.getClientIP(),
+            userAgent = WebUtils.getUserAgent()?.let { if (it.length > 500) it.substring(0, 500) else it } ?: "",
+            sessionId = revokedSession.sessionId,
+        )
+        loginLogService.createLoginLog(logoutLog)
     }
 
     private fun updateUserLoginIp(user: AdminUser, loginIp: InetAddress?) {
@@ -188,23 +196,16 @@ open class AdminAuthService(
         )
     }
 
-    private fun resolveUserAgent(request: HttpRequest<*>?): String {
-        return request?.headers?.get(HttpHeaders.USER_AGENT).orEmpty()
-    }
-
-    private fun resolveTraceId(request: HttpRequest<*>?): String {
-        val explicitTraceId = request?.headers?.get("X-Trace-Id")?.trim()?.takeIf(String::isNotBlank)
-        if (explicitTraceId != null) {
-            return explicitTraceId
+    private fun resolveBearerTokenFromCurrentRequest(): String? {
+        val authorization = WebUtils.getRequest()?.headers?.get(HttpHeaders.AUTHORIZATION).orEmpty()
+        if (authorization.isBlank()) {
+            return null
         }
-        val traceParent = request?.headers?.get("traceparent")?.trim().orEmpty()
-        val parts = traceParent.split('-')
-        if (parts.size >= 4 && parts[1].isNotBlank()) {
-            return parts[1]
+        if (authorization.startsWith("Bearer ", ignoreCase = true)) {
+            return authorization.substring(7).trim().takeIf(String::isNotBlank)
         }
-        return UUID.randomUUID().toString().replace("-", "")
+        return authorization.trim().takeIf(String::isNotBlank)
     }
 
 }
-
 

@@ -21,6 +21,13 @@ interface SessionTokenService {
      * 为登录用户签发 access/refresh token，并将会话写入 Redis。
      */
     fun issueTokens(loginUser: LoginUser, clientId: String? = null): IssuedTokenPair
+
+    /**
+     * 按 access token 撤销会话。
+     *
+     * @return 被撤销的会话摘要；若 access token 不存在则返回 null
+     */
+    fun revokeByAccessToken(accessToken: String): RevokedSessionToken?
 }
 
 @Singleton
@@ -46,7 +53,7 @@ open class RedisSessionTokenService(
         val refreshTtlSeconds = securityProperties.refreshTokenExpireSeconds.toLong()
         val now = Instant.now(clock)
 
-        val sessionRecord = RedisSessionTokenRecord(
+        val sessionRecord = SessionTokenRecord(
             sessionId = sessionId,
             accessToken = accessToken,
             refreshToken = refreshToken,
@@ -74,6 +81,46 @@ open class RedisSessionTokenService(
         )
     }
 
+    override fun revokeByAccessToken(accessToken: String): RevokedSessionToken? {
+        val normalizedAccessToken = accessToken.trim()
+        if (normalizedAccessToken.isBlank()) {
+            return null
+        }
+
+        return runCatching {
+            redisClient.connect().use { connection ->
+                val commands = connection.sync()
+                val sessionId = commands.get(accessKey(normalizedAccessToken)) ?: return@use null
+                val sessionPayload = commands.get(sessionKey(sessionId))
+                if (sessionPayload.isNullOrBlank()) {
+                    commands.del(accessKey(normalizedAccessToken))
+                    return@use null
+                }
+
+                val sessionRecord = deserializeSessionRecord(sessionPayload)
+                commands.del(
+                    accessKey(sessionRecord.accessToken),
+                    refreshKey(sessionRecord.refreshToken),
+                    sessionKey(sessionRecord.sessionId),
+                )
+
+                RevokedSessionToken(
+                    sessionId = sessionRecord.sessionId,
+                    accessToken = sessionRecord.accessToken,
+                    refreshToken = sessionRecord.refreshToken,
+                    userId = sessionRecord.userId,
+                    userType = sessionRecord.userType,
+                    tenantId = sessionRecord.tenantId,
+                    username = sessionRecord.username,
+                    clientId = sessionRecord.clientId,
+                    scopes = sessionRecord.scopes.toSet(),
+                )
+            }
+        }.getOrElse { ex ->
+            throw ServiceExceptionFactory.internalServerError("撤销 Redis 登录会话失败: {}", ex.message ?: "unknown")
+        }
+    }
+
     private fun validateProperties() {
         require(securityProperties.accessTokenExpireSeconds > 0) { "accessTokenExpireSeconds 必须大于 0" }
         require(securityProperties.refreshTokenExpireSeconds > 0) { "refreshTokenExpireSeconds 必须大于 0" }
@@ -81,11 +128,20 @@ open class RedisSessionTokenService(
         require(securityProperties.redis.keyPrefix.isNotBlank()) { "redis.keyPrefix 不能为空" }
     }
 
-    private fun serializeSessionRecord(sessionRecord: RedisSessionTokenRecord): String {
+    private fun serializeSessionRecord(sessionRecord: SessionTokenRecord): String {
         return runCatching {
             jsonMapper.writeValueAsString(sessionRecord)
         }.getOrElse { ex ->
             throw ServiceExceptionFactory.internalServerError("序列化登录会话失败: {}", ex.message ?: "unknown")
+        }
+    }
+
+    private fun deserializeSessionRecord(payload: String): SessionTokenRecord {
+        return runCatching {
+            jsonMapper.readValue(payload, SessionTokenRecord::class.java)
+                ?: throw IllegalStateException("反序列化结果为空")
+        }.getOrElse { ex ->
+            throw ServiceExceptionFactory.internalServerError("反序列化登录会话失败: {}", ex.message ?: "unknown")
         }
     }
 
@@ -135,7 +191,7 @@ open class RedisSessionTokenService(
 }
 
 @Serdeable
-private data class RedisSessionTokenRecord(
+data class SessionTokenRecord(
     val sessionId: String,
     val accessToken: String,
     val refreshToken: String,
@@ -151,3 +207,15 @@ private data class RedisSessionTokenRecord(
     val refreshTokenExpiresAtEpochSecond: Long,
 )
 
+@Serdeable
+data class RevokedSessionToken(
+    val sessionId: String,
+    val accessToken: String,
+    val refreshToken: String,
+    val userId: Long,
+    val userType: Int,
+    val tenantId: Long,
+    val username: String,
+    val clientId: String,
+    val scopes: Set<String>,
+)
