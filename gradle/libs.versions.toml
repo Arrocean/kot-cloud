@@ -1,33 +1,33 @@
 [versions]
-ktor = "3.5.0"
-micrometer = "1.16.5"
-exposed = "1.3.0"
-koin = "4.2.1"
+ktor = "3.5.1"
+micrometer = "1.17.0"
+exposed = "1.3.1"
+koin = "4.2.2"
 koter = "0.0.1"
 jackson = "3.0.3"
 
 # Micronaut 相关版本
-micronaut = "5.0.0"
+micronaut = "5.1.3"
 micronaut-platform = "4.10.7"
 micronaut-validation = "5.0.0"
-micronaut-data  = "5.0.1"
-micronaut-sql = "7.0.0"
-micronaut-serde = "3.0.0"
-micronaut-security = "5.0.0"
+micronaut-data  = "5.0.5"
+micronaut-sql = "7.0.2"
+micronaut-serde = "3.1.0"
+micronaut-security = "5.2.0"
 bcprov = "1.84"
 jbcrypt = "0.4"
-lettuce = "7.5.2.RELEASE"
+lettuce = "7.6.0.RELEASE"
 
 # DB
-postgre = "42.7.11"
+postgre = "42.7.13"
 
 # Jakarta 相关
 jakarta-validation = "4.0.0-M1"
 
 # Log 相关
 slf4j = "2.0.18"
-kotlin-logging = "8.0.02"
-micronaut-tracing-opentelemetry = "7.2.0"
+kotlin-logging = "8.0.4"
+micronaut-tracing-opentelemetry = "8.1.0"
 
 
 [libraries]
