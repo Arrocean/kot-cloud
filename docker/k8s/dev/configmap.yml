@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kot-server-config
+data:
+  application-dev.yml: |
+    micronaut:
+      application:
+        name: kot-server
+      server:
+        port: 8080
+    datasources:
+      default:
+        url: jdbc:postgresql://localhost:5432/kot_cloud_dev
+        driver-class-name: org.postgresql.Driver
+        username: dev_user
+        password: dev_pass

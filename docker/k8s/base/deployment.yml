@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kot-server
+  labels:
+    app: kot-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kot-server
+  template:
+    metadata:
+      labels:
+        app: kot-server
+    spec:
+      containers:
+        - name: kot-server
+          image: kot-server:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MICRONAUT_ENVIRONMENTS
+              value: prod
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kot-server-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kot-server-secret
+                  key: db-password
+          volumeMounts:
+            - name: config
+              mountPath: /app/kot-server-0.0.1/conf
+              readOnly: true
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 20
+      volumes:
+        - name: config
+          configMap:
+            name: kot-server-config
