@@ -7,13 +7,14 @@ koter = "0.0.1"
 jackson = "3.0.3"
 
 # Micronaut 相关版本
-micronaut = "5.1.3"
+micronaut = "5.1.6"
 micronaut-platform = "4.10.7"
 micronaut-validation = "5.0.0"
-micronaut-data  = "5.0.5"
+micronaut-data  = "5.0.6"
 micronaut-sql = "7.0.2"
 micronaut-serde = "3.1.0"
 micronaut-security = "5.2.0"
+micronaut-openapi = "7.0.0"
 bcprov = "1.84"
 jbcrypt = "0.4"
 lettuce = "7.6.0.RELEASE"
@@ -90,6 +91,10 @@ micronaut-validation-processor = { group = "io.micronaut.validation", name = "mi
 # Micronaut Security
 micronaut-security = { group = "io.micronaut.security", name = "micronaut-security", version.ref = "micronaut-security" }
 micronaut-security-jwt = { group = "io.micronaut.security", name = "micronaut-security-jwt", version.ref = "micronaut-security" }
+
+# Micronaut OpenApi
+micronaut-openapi = { group = "io.micronaut.openapi", name = "micronaut-openapi", version.ref = "micronaut-openapi" }
+micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronaut-openapi" }
 
 # Hikari 连接池
 micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hikari", version.ref = "micronaut-sql" }

@@ -11,6 +11,8 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.validation.Valid
 
 /**
@@ -39,6 +41,8 @@ open class AdminAuthControllerV1(
     /**
      * 管理员登录。
      */
+    @Operation(summary = "管理员登录", description = "用户名密码登录，返回 JWT accessToken")
+    @ApiResponse(responseCode = "200", description = "登录成功，返回 token")
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Post("/login")
     open fun login(@Body @Valid req: AdminLoginRequest): CommonResult<AdminLoginResponse> {
@@ -48,6 +52,8 @@ open class AdminAuthControllerV1(
     /**
      * 管理员登出。
      */
+    @Operation(summary = "管理员登出", description = "使当前 accessToken 失效，清除 Redis 会话")
+    @ApiResponse(responseCode = "200", description = "登出成功")
     @Post("/logout")
     open fun logout(): CommonResult<Boolean> {
         authAppService.logout()
@@ -57,9 +63,22 @@ open class AdminAuthControllerV1(
     /**
      * 获取当前登录用户信息。
      */
+    @Operation(summary = "获取当前用户信息", description = "根据当前 accessToken 获取登录用户的基本信息与权限范围")
+    @ApiResponse(responseCode = "200", description = "用户信息")
     @Get("/me")
     open fun getProfile(): CommonResult<AdminAuthProfileResponse> {
         return success(authAppService.getProfile())
+    }
+
+    /**
+     * 管理员注册。注册成功后自动登录，返回 accessToken。
+     */
+    @Operation(summary = "管理员注册", description = "注册新管理员账号，成功后自动登录并返回 JWT accessToken")
+    @ApiResponse(responseCode = "200", description = "注册并登录成功，返回 token")
+    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Post("/register")
+    open fun register(@Body @Valid req: AdminRegisterRequest): CommonResult<AdminLoginResponse> {
+        return success(authAppService.register(req))
     }
 
 }

@@ -34,6 +34,9 @@ dependencies {
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.databind)
 
+    // Micronaut OpenApi
+    ksp(libs.micronaut.openapi)
+
     /* ============= 基础设施 Starter（关键） ============= */
     // 选择你的数据库组合：PostgreSQL (包含 md-jdbc-core + driver)
     implementation(project(":kot-framework:kot-micronaut-starter-md-postgresql"))

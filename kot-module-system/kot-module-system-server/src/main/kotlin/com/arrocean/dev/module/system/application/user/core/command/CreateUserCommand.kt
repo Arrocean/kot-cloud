@@ -15,3 +15,9 @@ data class CreateUserCommand(
         }
     }
 }
+
+data class RegisterUserCommand(
+    val username: String,
+    val password: String,
+    val nickname: String,
+)

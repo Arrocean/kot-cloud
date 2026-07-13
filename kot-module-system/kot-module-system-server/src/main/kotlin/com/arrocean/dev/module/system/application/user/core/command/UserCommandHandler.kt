@@ -72,6 +72,28 @@ open class UserCommandHandler(
         return adminUserRepository.update(updated)
     }
 
+    @Transactional
+    open fun handle(command: RegisterUserCommand): AdminUser {
+        if (adminUserRepository.existsByUsername(command.username)) {
+            throw ServiceExceptionFactory.exception(UserErrorCodeConstants.USER_USERNAME_EXISTS)
+        }
+        val passwordHash = passwordEncoder.encode(command.password)
+        val draft = AdminUserDraft(
+            username = command.username,
+            passwordHash = passwordHash,
+            nickname = command.nickname,
+            deptId = null,
+            email = null,
+            mobile = null,
+            gender = 0,
+            status = 1,
+            avatarUrl = null,
+            loginIp = null,
+            remark = null,
+        )
+        return adminUserRepository.save(draft)
+    }
+
     /**
      * 处理用户登录更新命令
      *

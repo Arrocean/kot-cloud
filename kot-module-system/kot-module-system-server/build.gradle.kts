@@ -39,6 +39,9 @@ dependencies {
     // Micronaut 注解处理器
     ksp(libs.micronaut.inject.kotlin)
 
+    // Micronaut OpenApi
+    ksp(libs.micronaut.openapi)
+    api(libs.micronaut.openapi.annotations)
 
     // system-api 模块
     api(project(":kot-module-system:kot-module-system-api"))

@@ -46,3 +46,4 @@ build/
 
 ## claude code
 *.claude
+AGENTS.md

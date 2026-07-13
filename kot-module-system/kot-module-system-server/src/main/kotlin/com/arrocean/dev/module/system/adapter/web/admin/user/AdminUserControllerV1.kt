@@ -10,6 +10,8 @@ import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.validation.Valid
 
 /**
@@ -36,6 +38,8 @@ open class AdminUserControllerV1(
      * @param req 创建用户请求
      * @return 创建成功的用户 ID
      */
+    @Operation(summary = "创建用户", description = "新增一个后台管理用户")
+    @ApiResponse(responseCode = "201", description = "创建成功，返回用户 ID")
     @Post
     @Status(HttpStatus.CREATED)
     open fun create(@Body @Valid req: CreateUserRequest): CommonResult<Long?> {
@@ -48,6 +52,8 @@ open class AdminUserControllerV1(
      * @param req 创建用户请求列表
      * TODO WhiteSprite：请求体待定...
      */
+    @Operation(summary = "批量创建用户", description = "批量新增多个后台管理用户")
+    @ApiResponse(responseCode = "201", description = "批量创建成功，返回用户 ID 列表")
     @Post("/batch")
     @Status(HttpStatus.CREATED)
     open fun batchCreate(@Body @Valid req: List<CreateUserRequest>): CommonResult<List<Long?>> {
@@ -59,6 +65,8 @@ open class AdminUserControllerV1(
      *
      * @param id 用户 ID
      */
+    @Operation(summary = "删除用户", description = "根据 ID 删除指定管理员用户")
+    @ApiResponse(responseCode = "204", description = "删除成功，无响应体")
     @Delete("/{id}")
     @Status(HttpStatus.NO_CONTENT)
     open fun delete(@PathVariable id: Long) {
@@ -70,6 +78,8 @@ open class AdminUserControllerV1(
      *
      * @param ids 用户 ID 列表
      */
+    @Operation(summary = "批量删除用户", description = "根据 ID 列表批量删除管理员用户")
+    @ApiResponse(responseCode = "200", description = "批量删除成功")
     @Delete("/batch/{ids}")
     open fun batchDelete(@PathVariable ids: List<Long>) {
         userService.batchDelete(ids)
@@ -82,6 +92,8 @@ open class AdminUserControllerV1(
      * @param req 更新用户请求
      * @return 更新成功的用户信息
      */
+    @Operation(summary = "更新用户", description = "根据 ID 更新指定管理员用户的信息")
+    @ApiResponse(responseCode = "200", description = "更新成功，返回用户信息")
     @Put("/{id}")
     open fun update(
         @PathVariable id: Long,
@@ -97,6 +109,8 @@ open class AdminUserControllerV1(
      * @param id 用户 ID
      * @return 用户信息
      */
+    @Operation(summary = "查询用户", description = "根据 ID 获取指定管理员用户的详细信息")
+    @ApiResponse(responseCode = "200", description = "查询成功，返回用户信息")
     @Get("/{id}")
     open fun getById(@PathVariable id: Long): CommonResult<GetAdminUserResponse?> {
         val domainUser = userService.getById(id)
@@ -110,6 +124,8 @@ open class AdminUserControllerV1(
      * @param query 查询条件
      * @return 用户列表
      */
+    @Operation(summary = "分页查询用户", description = "按关键字分页查询管理员用户列表")
+    @ApiResponse(responseCode = "200", description = "查询成功，返回分页数据")
     @Get
     open fun page(
         @RequestBean @Valid query: PageAdminUserRequest
@@ -123,6 +139,8 @@ open class AdminUserControllerV1(
     /**
      * 测试日志系统
      */
+    @Operation(summary = "测试日志", description = "测试日志系统是否正常工作（调试用）")
+    @ApiResponse(responseCode = "200", description = "日志测试触发成功")
     @Get("/testLogging")
     open fun testLogging(): CommonResult<String> {
         userService.testLogging()

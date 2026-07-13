@@ -14,8 +14,10 @@ import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminAuthAssembler
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminAuthProfileResponse
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminLoginRequest
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminLoginResponse
+import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminRegisterRequest
 import com.arrocean.dev.module.system.application.log.core.facade.LoginLogService
 import com.arrocean.dev.module.system.application.user.core.command.LoginUserCommand
+import com.arrocean.dev.module.system.application.user.core.command.RegisterUserCommand
 import com.arrocean.dev.module.system.application.user.core.command.UserCommandHandler
 import com.arrocean.dev.module.system.application.user.core.query.GetUserByUsernameQuery
 import com.arrocean.dev.module.system.application.user.core.query.UserQueryHandler
@@ -71,6 +73,21 @@ open class AdminAuthService(
 //        }
 
         return createTokenAfterLoginSuccess(user, LoginLogTypeEnum.LOGIN_PASSWORD)
+    }
+
+    /**
+     * 管理员注册。注册成功后自动登录，返回 accessToken。
+     */
+    @Transactional
+    open fun register(req: AdminRegisterRequest): AdminLoginResponse {
+        val saved = userCommandHandler.handle(
+            RegisterUserCommand(
+                username = req.username,
+                password = req.password,
+                nickname = req.nickname ?: req.username,
+            )
+        )
+        return createTokenAfterLoginSuccess(saved, LoginLogTypeEnum.LOGIN_PASSWORD)
     }
 
     /**

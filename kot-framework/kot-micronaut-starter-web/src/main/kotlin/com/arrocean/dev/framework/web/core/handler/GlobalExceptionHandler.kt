@@ -15,6 +15,7 @@ import io.micronaut.http.codec.CodecException
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.http.server.exceptions.ConversionErrorHandler
 import io.micronaut.http.server.exceptions.ExceptionHandler
+import io.micronaut.http.server.exceptions.HttpStatusHandler
 import io.micronaut.http.server.exceptions.UnsatisfiedArgumentHandler
 import io.micronaut.http.server.exceptions.UnsatisfiedRouteHandler
 import io.micronaut.json.JsonSyntaxException
@@ -234,6 +235,7 @@ class JsonSyntaxExceptionHandler :
 }
 
 @Singleton
+@Replaces(HttpStatusHandler::class)
 class HttpStatusExceptionHandler :
     ExceptionHandler<HttpStatusException, HttpResponse<CommonResult<Nothing>>> {
 

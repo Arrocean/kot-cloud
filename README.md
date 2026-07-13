@@ -31,24 +31,24 @@ technical choices:
 
 **Core language**:
 
-- [Kotlin](https://kotlinlang.org/) 2.3.20 - As the primary development language, fully leverage its features such as
+- [Kotlin](https://kotlinlang.org/) 2.3.20 – As the primary development language, fully leverage its features such as
   null safety, extension functions, and coroutines to enhance development efficiency and code quality
 
 **Core framework**:
 
-- [Micronaut](https://micronaut.io/) - This framework was chosen because it boasts quick startup and low memory
+- [Micronaut](https://micronaut.io/) – This framework was chosen because it boasts quick startup and low memory
   consumption, making it particularly suitable for microservices and cloud-native applications, and is compatible with
   Spring
   Boot has significant advantages in performance compared to others
 
 **Build tools**:
 
-- [Gradle](https://gradle.org/) - Uses Kotlin DSL as the build script language, providing better IDE support and type
+- [Gradle](https://gradle.org/) – Uses Kotlin DSL as the build script language, providing better IDE support and type
   safety
 
 **Compilation optimization**:
 
-- [GraalVM](https://www.graalvm.org/) - used to compile applications into native images, significantly reducing startup
+- [GraalVM](https://www.graalvm.org/) – used to compile applications into native images, significantly reducing startup
   time and memory consumption, and fully leveraging the advantages of Kotlin
 
 **ORM**: Mixed usage
@@ -62,21 +62,21 @@ technical choices:
 
 database
 
-- [PostgreSQL](https://www.postgresql.org/) - for relational databases
-- [MariaDB](https://mariadb.org/) - for relational databases (future support)
+- [PostgreSQL](https://www.postgresql.org/) – for relational databases
+- [MariaDB](https://mariadb.org/) – for relational databases (future support)
 
 **Plugin**:
 
-- [KSP](https://github.com/google/ksp) 2.3.6 - used for code generation, offering faster compilation speeds and improved
+- [KSP](https://github.com/google/ksp) 2.3.6 – used for code generation, offering faster compilation speeds and improved
   Kotlin support
-- [Micronaut Application](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/) 4.6.2 -
+- [Micronaut Application](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/) 4.6.2 –
   Used for creating and managing Micronaut applications
 
 #### Temporary precautions
 
 If you need to use the local configuration file (application.properties) for development, please ensure to add the
 environment variable `MICRONAUT_ENVIRONMENTS=local` in the runtime environment
-so as to correctly load the local configuration file.
+to correctly load the local configuration file.
 
 #### Installation tutorial
 
