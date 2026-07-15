@@ -4,6 +4,11 @@ import com.arrocean.dev.framework.common.http.ApiPrefix
 import com.arrocean.dev.framework.common.poko.CommonResult
 import com.arrocean.dev.framework.common.poko.PageResult
 import com.arrocean.dev.framework.common.poko.success
+import com.arrocean.dev.module.system.adapter.config.AdminUserPageSuccessResponseSchema
+import com.arrocean.dev.module.system.adapter.config.AdminUserSuccessResponseSchema
+import com.arrocean.dev.module.system.adapter.config.CreatedIdListSuccessResponseSchema
+import com.arrocean.dev.module.system.adapter.config.CreatedIdSuccessResponseSchema
+import com.arrocean.dev.module.system.adapter.config.StringSuccessResponseSchema
 import com.arrocean.dev.module.system.adapter.security.RequirePermission
 import com.arrocean.dev.module.system.application.user.core.facade.AdminUserAppService
 import io.micronaut.http.HttpStatus
@@ -12,7 +17,11 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 
 /**
@@ -22,6 +31,8 @@ import jakarta.validation.Valid
  */
 @Validated
 @Secured(SecurityRule.IS_AUTHENTICATED)
+@Tag(name = "用户管理")
+@SecurityRequirement(name = "bearerAuth")
 @Controller(ApiPrefix.ADMIN_V1 + "/system/users")
 open class AdminUserControllerV1(
     /**
@@ -40,7 +51,11 @@ open class AdminUserControllerV1(
      * @return 创建成功的用户 ID
      */
     @Operation(summary = "创建用户", description = "新增一个后台管理用户")
-    @ApiResponse(responseCode = "201", description = "创建成功，返回用户 ID")
+    @ApiResponse(
+        responseCode = "201",
+        description = "创建成功，返回用户 ID",
+        content = [Content(schema = Schema(implementation = CreatedIdSuccessResponseSchema::class))],
+    )
     @Post
     @Status(HttpStatus.CREATED)
     @RequirePermission("system:user:create")
@@ -55,7 +70,11 @@ open class AdminUserControllerV1(
      * TODO WhiteSprite：请求体待定...
      */
     @Operation(summary = "批量创建用户", description = "批量新增多个后台管理用户")
-    @ApiResponse(responseCode = "201", description = "批量创建成功，返回用户 ID 列表")
+    @ApiResponse(
+        responseCode = "201",
+        description = "批量创建成功，返回用户 ID 列表",
+        content = [Content(schema = Schema(implementation = CreatedIdListSuccessResponseSchema::class))],
+    )
     @Post("/batch")
     @Status(HttpStatus.CREATED)
     @RequirePermission("system:user:create")
@@ -98,7 +117,11 @@ open class AdminUserControllerV1(
      * @return 更新成功的用户信息
      */
     @Operation(summary = "更新用户", description = "根据 ID 更新指定管理员用户的信息")
-    @ApiResponse(responseCode = "200", description = "更新成功，返回用户信息")
+    @ApiResponse(
+        responseCode = "200",
+        description = "更新成功，返回用户信息",
+        content = [Content(schema = Schema(implementation = AdminUserSuccessResponseSchema::class))],
+    )
     @Put("/{id}")
     @RequirePermission("system:user:update")
     open fun update(
@@ -116,7 +139,11 @@ open class AdminUserControllerV1(
      * @return 用户信息
      */
     @Operation(summary = "查询用户", description = "根据 ID 获取指定管理员用户的详细信息")
-    @ApiResponse(responseCode = "200", description = "查询成功，返回用户信息")
+    @ApiResponse(
+        responseCode = "200",
+        description = "查询成功，返回用户信息",
+        content = [Content(schema = Schema(implementation = AdminUserSuccessResponseSchema::class))],
+    )
     @Get("/{id}")
     @RequirePermission("system:user:list")
     open fun getById(@PathVariable id: Long): CommonResult<GetAdminUserResponse?> {
@@ -132,7 +159,11 @@ open class AdminUserControllerV1(
      * @return 用户列表
      */
     @Operation(summary = "分页查询用户", description = "按关键字分页查询管理员用户列表")
-    @ApiResponse(responseCode = "200", description = "查询成功，返回分页数据")
+    @ApiResponse(
+        responseCode = "200",
+        description = "查询成功，返回分页数据",
+        content = [Content(schema = Schema(implementation = AdminUserPageSuccessResponseSchema::class))],
+    )
     @Get
     @RequirePermission("system:user:list")
     open fun page(
@@ -148,7 +179,11 @@ open class AdminUserControllerV1(
      * 测试日志系统
      */
     @Operation(summary = "测试日志", description = "测试日志系统是否正常工作（调试用）")
-    @ApiResponse(responseCode = "200", description = "日志测试触发成功")
+    @ApiResponse(
+        responseCode = "200",
+        description = "日志测试触发成功",
+        content = [Content(schema = Schema(implementation = StringSuccessResponseSchema::class))],
+    )
     @Get("/testLogging")
     open fun testLogging(): CommonResult<String> {
         userService.testLogging()
