@@ -4,6 +4,7 @@ import com.arrocean.dev.framework.common.http.ApiPrefix
 import com.arrocean.dev.framework.common.poko.CommonResult
 import com.arrocean.dev.framework.common.poko.PageResult
 import com.arrocean.dev.framework.common.poko.success
+import com.arrocean.dev.module.system.adapter.security.RequirePermission
 import com.arrocean.dev.module.system.application.user.core.facade.AdminUserAppService
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
@@ -42,6 +43,7 @@ open class AdminUserControllerV1(
     @ApiResponse(responseCode = "201", description = "创建成功，返回用户 ID")
     @Post
     @Status(HttpStatus.CREATED)
+    @RequirePermission("system:user:create")
     open fun create(@Body @Valid req: CreateUserRequest): CommonResult<Long?> {
         return success(userService.create(req))
     }
@@ -56,6 +58,7 @@ open class AdminUserControllerV1(
     @ApiResponse(responseCode = "201", description = "批量创建成功，返回用户 ID 列表")
     @Post("/batch")
     @Status(HttpStatus.CREATED)
+    @RequirePermission("system:user:create")
     open fun batchCreate(@Body @Valid req: List<CreateUserRequest>): CommonResult<List<Long?>> {
         return success(userService.batchCreate(req))
     }
@@ -69,6 +72,7 @@ open class AdminUserControllerV1(
     @ApiResponse(responseCode = "204", description = "删除成功，无响应体")
     @Delete("/{id}")
     @Status(HttpStatus.NO_CONTENT)
+    @RequirePermission("system:user:delete")
     open fun delete(@PathVariable id: Long) {
         userService.delete(id)
     }
@@ -81,6 +85,7 @@ open class AdminUserControllerV1(
     @Operation(summary = "批量删除用户", description = "根据 ID 列表批量删除管理员用户")
     @ApiResponse(responseCode = "200", description = "批量删除成功")
     @Delete("/batch/{ids}")
+    @RequirePermission("system:user:delete")
     open fun batchDelete(@PathVariable ids: List<Long>) {
         userService.batchDelete(ids)
     }
@@ -95,6 +100,7 @@ open class AdminUserControllerV1(
     @Operation(summary = "更新用户", description = "根据 ID 更新指定管理员用户的信息")
     @ApiResponse(responseCode = "200", description = "更新成功，返回用户信息")
     @Put("/{id}")
+    @RequirePermission("system:user:update")
     open fun update(
         @PathVariable id: Long,
         @Body @Valid req: UpdateUserRequest
@@ -112,6 +118,7 @@ open class AdminUserControllerV1(
     @Operation(summary = "查询用户", description = "根据 ID 获取指定管理员用户的详细信息")
     @ApiResponse(responseCode = "200", description = "查询成功，返回用户信息")
     @Get("/{id}")
+    @RequirePermission("system:user:list")
     open fun getById(@PathVariable id: Long): CommonResult<GetAdminUserResponse?> {
         val domainUser = userService.getById(id)
         val resp = domainUser?.let { AdminUserAssembler.toGetAdminUserResponse(it) }
@@ -127,6 +134,7 @@ open class AdminUserControllerV1(
     @Operation(summary = "分页查询用户", description = "按关键字分页查询管理员用户列表")
     @ApiResponse(responseCode = "200", description = "查询成功，返回分页数据")
     @Get
+    @RequirePermission("system:user:list")
     open fun page(
         @RequestBean @Valid query: PageAdminUserRequest
     ): CommonResult<PageResult<GetAdminUserResponse>> {

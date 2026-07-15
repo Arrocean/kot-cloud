@@ -10,12 +10,21 @@ import com.arrocean.dev.module.system.domain.user.repository.AdminUserRepository
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
 
+/**
+ * 用户命令处理器，负责编排用户创建、删除、更新、注册和登录信息更新操作。
+ */
 @Singleton
 open class UserCommandHandler(
     private val adminUserRepository: AdminUserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val currentLoginUserProvider: CurrentLoginUserProvider,
 ) {
+    /**
+     * 处理创建用户命令。
+     *
+     * @param command 包含用户名和密码的[CreateUserCommand]对象
+     * @return 创建成功后的用户ID；未生成ID时返回null
+     */
     @Transactional
     open fun handle(command: CreateUserCommand): Long? {
         if (adminUserRepository.existsByUsername(command.name)) {
@@ -45,12 +54,26 @@ open class UserCommandHandler(
         return saved.id
     }
 
+    /**
+     * 处理删除用户命令。
+     *
+     * 用户不存在时不会执行删除操作。
+     *
+     * @param command 包含待删除用户ID的[DeleteUserCommand]对象
+     */
     @Transactional
     open fun handle(command: DeleteUserCommand) {
         if (!adminUserRepository.existsById(command.id)) return
         adminUserRepository.deleteById(command.id)
     }
 
+    /**
+     * 处理批量删除用户命令。
+     *
+     * 用户ID列表为空时不会执行删除操作。
+     *
+     * @param command 包含待删除用户ID列表的[BatchDeleteUserCommand]对象
+     */
     @Transactional
     open fun handle(command: BatchDeleteUserCommand) {
         if (!command.ids.isEmpty()) {
@@ -72,6 +95,12 @@ open class UserCommandHandler(
         return adminUserRepository.update(updated)
     }
 
+    /**
+     * 处理用户注册命令。
+     *
+     * @param command 包含用户名、密码和昵称的[RegisterUserCommand]对象
+     * @return 创建成功后的[AdminUser]对象
+     */
     @Transactional
     open fun handle(command: RegisterUserCommand): AdminUser {
         if (adminUserRepository.existsByUsername(command.username)) {

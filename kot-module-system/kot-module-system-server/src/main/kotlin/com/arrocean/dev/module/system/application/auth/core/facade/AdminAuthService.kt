@@ -16,6 +16,7 @@ import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminLoginRequest
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminLoginResponse
 import com.arrocean.dev.module.system.adapter.web.admin.auth.AdminRegisterRequest
 import com.arrocean.dev.module.system.application.log.core.facade.LoginLogService
+import com.arrocean.dev.module.system.application.rbac.core.command.RbacCommandHandler
 import com.arrocean.dev.module.system.application.user.core.command.LoginUserCommand
 import com.arrocean.dev.module.system.application.user.core.command.RegisterUserCommand
 import com.arrocean.dev.module.system.application.user.core.command.UserCommandHandler
@@ -52,6 +53,7 @@ open class AdminAuthService(
     private val loginLogService: LoginLogService,
     private val clock: Clock,
     private val userCommandHandler: UserCommandHandler,
+    private val rbacCommandHandler: RbacCommandHandler,
     private val sessionTokenService: SessionTokenService,
 ) {
 
@@ -87,6 +89,7 @@ open class AdminAuthService(
                 nickname = req.nickname ?: req.username,
             )
         )
+        rbacCommandHandler.assignDefaultRole(saved.id, saved.tenantId)
         return createTokenAfterLoginSuccess(saved, LoginLogTypeEnum.LOGIN_PASSWORD)
     }
 
