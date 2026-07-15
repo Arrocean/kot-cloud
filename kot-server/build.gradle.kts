@@ -10,7 +10,7 @@ plugins {
     id("org.graalvm.buildtools.native")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.micronaut.runtime)
     // Micronaut HTTP
     implementation(libs.micronaut.http.server.netty)
+    implementation(libs.micronaut.tracing.opentelemetry)
 
     // Micronaut Data Processor
     ksp(libs.micronaut.inject.kotlin)
@@ -26,14 +27,15 @@ dependencies {
     // Kotlin 友好日志 API（编译期需要）
     implementation(libs.kotlin.logging)
 
-    // SLF4J -> Log4j2（运行时绑定）
-    runtimeOnly(libs.log4j.slf4j2.impl)
-    runtimeOnly(libs.log4j.core)
-    runtimeOnly(libs.log4j.api)
+    // SLF4J Simple（轻量控制台后端）
+    runtimeOnly(libs.slf4j.simple)
 
     // Micronaut Jackson
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.databind)
+
+    // Micronaut OpenApi
+    ksp(libs.micronaut.openapi)
 
     /* ============= 基础设施 Starter（关键） ============= */
     // 选择你的数据库组合：PostgreSQL (包含 md-jdbc-core + driver)
@@ -46,20 +48,23 @@ dependencies {
 configurations.configureEach {
     exclude(group = "ch.qos.logback", module = "logback-classic")
     exclude(group = "ch.qos.logback", module = "logback-core")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-core")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-api")
+    exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
 }
 
 ksp {
     arg("micronaut.processing.incremental", "true")
-    arg("micronaut.processing.annotations", "com.whitesprite.dev.*")
+    arg("micronaut.processing.annotations", "com.arrocean.dev.*")
 }
 
 application {
-    mainClass.set("com.whitesprite.dev.server.KotlinServerApplication")
+    mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
 }
 
 micronaut {
-    // Micronaut Platform 4.10.7
-    version.set("4.10.7")
+    // Micronaut Platform
+    version.set("5.0.0-RC1")
     importMicronautPlatform.set(true)
 
     runtime("netty")
@@ -67,7 +72,7 @@ micronaut {
     processing {
         incremental(true)
         // 默认使用**
-        annotations("com.whitesprite.dev.**")
+        annotations("com.arrocean.dev.**")
     }
 }
 
@@ -75,7 +80,7 @@ graalvmNative {
     binaries {
         named("main") {
             imageName.set("kot-server")
-            mainClass.set("com.whitesprite.dev.server.KotlinServerApplication")
+            mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
             buildArgs.addAll(
                 "-J-Xmx${project.property("native.image.xmx")}",
                 "-J-Xms${project.property("native.image.xms")}",

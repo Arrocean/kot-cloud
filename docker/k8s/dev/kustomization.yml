@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../base
+  - configmap.yml
+
+replicas:
+  - name: kot-server
+    count: 1
+
+patches:
+  - target:
+      kind: Deployment
+      name: kot-server
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: dev
