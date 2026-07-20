@@ -7,14 +7,15 @@ koter = "0.0.1"
 jackson = "3.0.3"
 
 # Micronaut 相关版本
-micronaut = "5.1.6"
-micronaut-platform = "4.10.7"
-micronaut-validation = "5.0.0"
-micronaut-data  = "5.0.6"
-micronaut-sql = "7.0.2"
+micronaut = "5.1.7"
+micronaut-platform = "5.0.4"
+micronaut-validation = "5.1.0"
+micronaut-data  = "5.1.0"
+micronaut-sql = "7.1.0"
 micronaut-serde = "3.1.0"
-micronaut-security = "5.2.0"
+micronaut-security = "5.3.1"
 micronaut-openapi = "7.0.0"
+micronaut-test = "5.0.1"
 bcprov = "1.84"
 jbcrypt = "0.4"
 lettuce = "7.6.0.RELEASE"
@@ -30,6 +31,8 @@ slf4j = "2.0.18"
 kotlin-logging = "8.0.4"
 micronaut-tracing-opentelemetry = "8.1.0"
 
+# Test 相关
+junit = "6.1.1"
 
 [libraries]
 # Ktor核心
@@ -71,8 +74,10 @@ micronaut-http = { group = "io.micronaut", name = "micronaut-http", version.ref 
 micronaut-http-server-netty = { group = "io.micronaut", name = "micronaut-http-server-netty", version.ref = "micronaut" }
 micronaut-logging = { group = "io.micronaut", name = "micronaut-logging", version.ref = "micronaut" }
 micronaut-context = { group = "io.micronaut", name = "micronaut-context", version.ref = "micronaut" }
-micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version.ref = "micronaut" }
 micronaut-jackson-databind = { group = "io.micronaut", name = "micronaut-jackson-databind", version.ref = "micronaut" }
+
+# Micronaut Platform
+micronaut-platform = { group = "io.micronaut.platform", name = "micronaut-platform", version.ref = "micronaut-platform" }
 
 # Micronaut Serde
 micronaut-serde-jackson = { group = "io.micronaut.serde", name = "micronaut-serde-jackson", version.ref = "micronaut-serde" }
@@ -96,6 +101,12 @@ micronaut-security-jwt = { group = "io.micronaut.security", name = "micronaut-se
 micronaut-openapi = { group = "io.micronaut.openapi", name = "micronaut-openapi", version.ref = "micronaut-openapi" }
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronaut-openapi" }
 
+# Micronaut Test
+micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version = "micronaut-test" }
+
+# JUnit Jupiter Test
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+
 # Hikari 连接池
 micronaut-jdbc-hikari = { group = "io.micronaut.sql", name = "micronaut-jdbc-hikari", version.ref = "micronaut-sql" }
 
@@ -114,6 +125,3 @@ postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "pos
 
 # Jakarta Validation
 jakarta-validation = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakarta-validation" }
-
-
-

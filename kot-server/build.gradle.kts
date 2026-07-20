@@ -64,7 +64,7 @@ application {
 
 micronaut {
     // Micronaut Platform
-    version.set("5.0.0-RC1")
+    version.set(libs.versions.micronaut.platform)
     importMicronautPlatform.set(true)
 
     runtime("netty")
