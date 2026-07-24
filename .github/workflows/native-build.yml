@@ -1,6 +1,10 @@
 name: Build and deploy native image
 
 on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -63,6 +67,7 @@ jobs:
         run: bash gradlew --no-daemon :kot-server:nativeCompile
 
       - name: Deploy native image
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
