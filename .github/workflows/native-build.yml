@@ -38,6 +38,16 @@ jobs:
           native-image --version
           native-image --version | grep -F "25.1"
 
+      - name: Use official Gradle distribution
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i \
+            -e 's#https\\://mirrors.cloud.tencent.com/gradle/#https\\://services.gradle.org/distributions/#' \
+            -e 's/^networkTimeout=.*/networkTimeout=60000/' \
+            -e 's/^retries=.*/retries=3/' \
+            gradle/wrapper/gradle-wrapper.properties
+
       - name: Build native image
         shell: bash
         run: bash gradlew --no-daemon :kot-server:nativeCompile
