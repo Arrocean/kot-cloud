@@ -38,12 +38,22 @@ jobs:
           native-image --version
           native-image --version | grep -F "25.1"
 
-      - name: Use official Gradle distribution
+      - name: Cache Gradle distribution
         shell: bash
         run: |
           set -euo pipefail
+          distribution_dir="${HOME}/.gradle/wrapper-downloads"
+          distribution_file="${distribution_dir}/gradle-9.6.1-all.zip"
+          mkdir -p "${distribution_dir}"
+          if [[ ! -f "${distribution_file}" ]]; then
+            curl --fail --location --continue-at - \
+              --retry 10 --retry-all-errors --retry-delay 2 \
+              --output "${distribution_file}.part" \
+              https://mirrors.cloud.tencent.com/gradle/gradle-9.6.1-all.zip
+            mv "${distribution_file}.part" "${distribution_file}"
+          fi
           sed -i \
-            -e 's#https\\://mirrors.cloud.tencent.com/gradle/#https\\://services.gradle.org/distributions/#' \
+            -e "s#^distributionUrl=.*#distributionUrl=file\\:${distribution_file}#" \
             -e 's/^networkTimeout=.*/networkTimeout=60000/' \
             -e 's/^retries=.*/retries=3/' \
             gradle/wrapper/gradle-wrapper.properties
