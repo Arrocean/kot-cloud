@@ -1,12 +1,7 @@
 plugins {
     application
     kotlin("jvm")
-    id("com.google.devtools.ksp")
-
-    // Micronaut 模块
-    id("io.micronaut.application")
-//
-//    // GraalVM 模块
+    // GraalVM 模块
     id("org.graalvm.buildtools.native")
 }
 
@@ -14,15 +9,13 @@ group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
+    // Micronaut Platform
+    implementation(platform(libs.micronaut.platform))
     // Micronaut Runtime
     implementation(libs.micronaut.runtime)
     // Micronaut HTTP
     implementation(libs.micronaut.http.server.netty)
     implementation(libs.micronaut.tracing.opentelemetry)
-
-    // Micronaut Data Processor
-    ksp(libs.micronaut.inject.kotlin)
-    ksp(libs.micronaut.jackson.processor)
 
     // Kotlin 友好日志 API（编译期需要）
     implementation(libs.kotlin.logging)
@@ -33,9 +26,6 @@ dependencies {
     // Micronaut Jackson
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.databind)
-
-    // Micronaut OpenApi
-    ksp(libs.micronaut.openapi)
 
     /* ============= 基础设施 Starter（关键） ============= */
     // 选择你的数据库组合：PostgreSQL (包含 md-jdbc-core + driver)
@@ -53,30 +43,13 @@ configurations.configureEach {
     exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
 }
 
-ksp {
-    arg("micronaut.processing.incremental", "true")
-    arg("micronaut.processing.annotations", "com.arrocean.dev.*")
-}
-
 application {
     mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
 }
 
-micronaut {
-    // Micronaut Platform
-    version.set(libs.versions.micronaut.platform)
-    importMicronautPlatform.set(true)
-
-    runtime("netty")
-
-    processing {
-        incremental(true)
-        // 默认使用**
-        annotations("com.arrocean.dev.**")
-    }
-}
-
 graalvmNative {
+    toolchainDetection.set(true)
+
     binaries {
         named("main") {
             imageName.set("kot-server")
