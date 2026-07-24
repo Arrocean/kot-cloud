@@ -54,8 +54,11 @@ jobs:
               --retry 10 --retry-all-errors --retry-delay 2 \
               --output "${distribution_file}.part" \
               https://mirrors.cloud.tencent.com/gradle/gradle-9.6.1-all.zip
-            mv "${distribution_file}.part" "${distribution_file}"
+            if [[ -f "${distribution_file}.part" ]]; then
+              mv "${distribution_file}.part" "${distribution_file}"
+            fi
           fi
+          unzip -tq "${distribution_file}" >/dev/null
           sed -i \
             -e "s#^distributionUrl=.*#distributionUrl=file\\:${distribution_file}#" \
             -e 's/^networkTimeout=.*/networkTimeout=60000/' \
