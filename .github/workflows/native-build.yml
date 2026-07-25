@@ -47,8 +47,8 @@ jobs:
         shell: bash
         run: |
           "${GRADLE_HOME}/bin/gradle" --no-daemon \
-          -Pnative.image.xmx=8g \
-          -Pnative.image.xms=512m: \
+          -Pnative.image.xmx=8G \
+          -Pnative.image.xms=512M: \
           :kot-server:nativeCompile
 
       - name: Deploy native image
