@@ -46,7 +46,10 @@ jobs:
       - name: Build native image
         shell: bash
         run: |
-          "${GRADLE_HOME}/bin/gradle" --no-daemon :kot-server:nativeCompile
+          "${GRADLE_HOME}/bin/gradle" --no-daemon \
+          -Pnative.image.xmx=8g \
+          -Pnative.image.xms=512m: \
+          :kot-server:nativeCompile
 
       - name: Deploy native image
         if: github.event_name != 'pull_request'
