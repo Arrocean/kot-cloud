@@ -57,7 +57,7 @@ graalvmNative {
             buildArgs.addAll(
                 "-J-Xmx${project.property("native.image.xmx")}",
                 "-J-Xms${project.property("native.image.xms")}",
-                "--no-fallback"
+                "-H:+EnableFallbackCompilation"
             )
         }
     }
