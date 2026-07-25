@@ -22,6 +22,7 @@ jobs:
 
     env:
       DEPLOY_DIR: /home/ubuntu/Kot-Cloud
+      GRADLE_HOME: /home/ubuntu/tools/gradle-9.6.1
 
     steps:
       - name: Check out repository
@@ -42,35 +43,9 @@ jobs:
           native-image --version
           native-image --version | grep -F "25.1"
 
-      - name: Cache Gradle distribution
-        shell: bash
-        run: |
-          set -euo pipefail
-          distribution_dir="${HOME}/.gradle/wrapper-downloads"
-          distribution_file="${distribution_dir}/gradle-9.6.1-all.zip"
-          mkdir -p "${distribution_dir}"
-          if [[ ! -f "${distribution_file}" ]]; then
-            for attempt in {1..20}; do
-              if curl --fail --location --http1.1 --continue-at - \
-                --output "${distribution_file}.part" \
-                https://mirrors.cloud.tencent.com/gradle/gradle-9.6.1-all.zip; then
-                break
-              fi
-              [[ "${attempt}" -lt 20 ]] || exit 1
-              sleep 2
-            done
-            mv "${distribution_file}.part" "${distribution_file}"
-          fi
-          unzip -tq "${distribution_file}" >/dev/null
-          sed -i \
-            -e "s#^distributionUrl=.*#distributionUrl=file\\:${distribution_file}#" \
-            -e 's/^networkTimeout=.*/networkTimeout=60000/' \
-            -e 's/^retries=.*/retries=3/' \
-            gradle/wrapper/gradle-wrapper.properties
-
       - name: Build native image
         shell: bash
-        run: bash gradlew --no-daemon :kot-server:nativeCompile
+        run: "${GRADLE_HOME}/bin/gradle" --no-daemon :kot-server:nativeCompile
 
       - name: Deploy native image
         if: github.event_name != 'pull_request'
