@@ -4,7 +4,7 @@ import com.arrocean.dev.gateway.config.GatewayProperties
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.SignedJWT
-import io.lettuce.core.RedisClient
+import io.lettuce.core.api.StatefulRedisConnection
 import jakarta.inject.Singleton
 import java.nio.charset.StandardCharsets
 import java.time.Instant
@@ -80,7 +80,7 @@ class NimbusGatewayTokenVerifier(
 /** 通过 Redis 会话记录确认已验签 Token 尚未被撤销。 */
 @Singleton
 class RedisGatewaySessionValidator(
-    private val redisClient: RedisClient,
+    private val redisConnection: StatefulRedisConnection<String, String>,
     private val properties: GatewayProperties,
 ) : GatewaySessionValidator {
 
@@ -93,9 +93,7 @@ class RedisGatewaySessionValidator(
      */
     override fun isActive(sessionId: String): Boolean {
         return try {
-            redisClient.connect().use { connection ->
-                connection.sync().exists(GatewaySessionKeyFactory.sessionKey(properties.redis.keyPrefix, sessionId)) > 0
-            }
+            redisConnection.sync().exists(GatewaySessionKeyFactory.sessionKey(properties.redis.keyPrefix, sessionId)) > 0
         } catch (ex: Exception) {
             throw GatewaySessionUnavailableException(ex)
         }

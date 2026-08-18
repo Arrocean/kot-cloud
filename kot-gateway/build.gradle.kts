@@ -16,7 +16,7 @@ dependencies {
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.databind)
     implementation(libs.micronaut.security.jwt)
-    implementation(libs.lettuce.core)
+    implementation(libs.micronaut.redis.lettuce)
     implementation(libs.kotlin.logging)
     runtimeOnly(libs.slf4j.simple)
 

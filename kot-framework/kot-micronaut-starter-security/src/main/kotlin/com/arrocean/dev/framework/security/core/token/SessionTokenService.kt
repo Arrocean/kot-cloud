@@ -3,14 +3,14 @@ package com.arrocean.dev.framework.security.core.token
 import com.arrocean.dev.framework.common.exception.util.ServiceExceptionFactory
 import com.arrocean.dev.framework.security.config.SecurityProperties
 import com.arrocean.dev.framework.security.core.context.LoginUser
+import io.lettuce.core.api.StatefulRedisConnection
 import io.micronaut.json.JsonMapper
-import io.lettuce.core.RedisClient
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Singleton
 import java.security.SecureRandom
 import java.time.Clock
 import java.time.Instant
-import java.util.Base64
+import java.util.*
 
 /**
  * 会话令牌服务。
@@ -35,7 +35,7 @@ open class RedisSessionTokenService(
     private val tokenService: TokenService,
     private val securityProperties: SecurityProperties,
     private val secureRandom: SecureRandom,
-    private val redisClient: RedisClient,
+    private val redisConnection: StatefulRedisConnection<String, String>,
     private val jsonMapper: JsonMapper,
     private val clock: Clock,
 ) : SessionTokenService {
@@ -88,34 +88,32 @@ open class RedisSessionTokenService(
         }
 
         return runCatching {
-            redisClient.connect().use { connection ->
-                val commands = connection.sync()
-                val sessionId = commands.get(accessKey(normalizedAccessToken)) ?: return@use null
-                val sessionPayload = commands.get(sessionKey(sessionId))
-                if (sessionPayload.isNullOrBlank()) {
-                    commands.del(accessKey(normalizedAccessToken))
-                    return@use null
-                }
-
-                val sessionRecord = deserializeSessionRecord(sessionPayload)
-                commands.del(
-                    accessKey(sessionRecord.accessToken),
-                    refreshKey(sessionRecord.refreshToken),
-                    sessionKey(sessionRecord.sessionId),
-                )
-
-                RevokedSessionToken(
-                    sessionId = sessionRecord.sessionId,
-                    accessToken = sessionRecord.accessToken,
-                    refreshToken = sessionRecord.refreshToken,
-                    userId = sessionRecord.userId,
-                    userType = sessionRecord.userType,
-                    tenantId = sessionRecord.tenantId,
-                    username = sessionRecord.username,
-                    clientId = sessionRecord.clientId,
-                    scopes = sessionRecord.scopes.toSet(),
-                )
+            val commands = redisConnection.sync()
+            val sessionId = commands.get(accessKey(normalizedAccessToken)) ?: return@runCatching null
+            val sessionPayload = commands.get(sessionKey(sessionId))
+            if (sessionPayload.isNullOrBlank()) {
+                commands.del(accessKey(normalizedAccessToken))
+                return@runCatching null
             }
+
+            val sessionRecord = deserializeSessionRecord(sessionPayload)
+            commands.del(
+                accessKey(sessionRecord.accessToken),
+                refreshKey(sessionRecord.refreshToken),
+                sessionKey(sessionRecord.sessionId),
+            )
+
+            RevokedSessionToken(
+                sessionId = sessionRecord.sessionId,
+                accessToken = sessionRecord.accessToken,
+                refreshToken = sessionRecord.refreshToken,
+                userId = sessionRecord.userId,
+                userType = sessionRecord.userType,
+                tenantId = sessionRecord.tenantId,
+                username = sessionRecord.username,
+                clientId = sessionRecord.clientId,
+                scopes = sessionRecord.scopes.toSet(),
+            )
         }.getOrElse { ex ->
             throw ServiceExceptionFactory.internalServerError("撤销 Redis 登录会话失败: {}", ex.message ?: "unknown")
         }
@@ -154,12 +152,10 @@ open class RedisSessionTokenService(
         payload: String,
     ) {
         runCatching {
-            redisClient.connect().use { connection ->
-                val commands = connection.sync()
-                commands.setex(sessionKey(sessionId), refreshTtlSeconds, payload)
-                commands.setex(accessKey(accessToken), accessTtlSeconds, sessionId)
-                commands.setex(refreshKey(refreshToken), refreshTtlSeconds, sessionId)
-            }
+            val commands = redisConnection.sync()
+            commands.setex(sessionKey(sessionId), refreshTtlSeconds, payload)
+            commands.setex(accessKey(accessToken), accessTtlSeconds, sessionId)
+            commands.setex(refreshKey(refreshToken), refreshTtlSeconds, sessionId)
         }.getOrElse { ex ->
             throw ServiceExceptionFactory.internalServerError("写入 Redis 登录会话失败: {}", ex.message ?: "unknown")
         }

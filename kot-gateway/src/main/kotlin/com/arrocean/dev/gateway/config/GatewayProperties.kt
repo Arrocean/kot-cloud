@@ -27,7 +27,6 @@ open class GatewayProperties {
 
     /** Redis 会话校验配置。 */
     open class RedisProperties {
-        var uri: String = "redis://127.0.0.1:6379/0"
         var keyPrefix: String = "kot:security"
     }
 

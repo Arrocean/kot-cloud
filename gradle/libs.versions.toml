@@ -12,13 +12,13 @@ micronaut-platform = "5.0.4"
 micronaut-validation = "5.1.0"
 micronaut-data  = "5.1.1"
 micronaut-sql = "7.1.0"
+micronaut-redis = "7.1.0"
 micronaut-serde = "3.1.0"
 micronaut-security = "5.3.1"
 micronaut-openapi = "7.0.0"
 micronaut-test = "5.0.1"
 bcprov = "1.84"
 jbcrypt = "0.4"
-lettuce = "7.6.0.RELEASE"
 
 # DB
 postgre = "42.7.13"
@@ -102,7 +102,10 @@ micronaut-openapi = { group = "io.micronaut.openapi", name = "micronaut-openapi"
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronaut-openapi" }
 
 # Micronaut Test
-micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version = "micronaut-test" }
+micronaut-test-junit5 = { group = "io.micronaut.test", name = "micronaut-test-junit5", version.ref = "micronaut-test" }
+
+# Micronaut Redis
+micronaut-redis-lettuce = { group = "io.micronaut.redis", name = "micronaut-redis-lettuce", version.ref = "micronaut-redis" }
 
 # JUnit Jupiter Test
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
@@ -115,8 +118,6 @@ bcprov-jdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.
 # jBCrypt 密码哈希库
 jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
 
-# Redis 客户端
-lettuce-core = { group = "io.lettuce", name = "lettuce-core", version.ref = "lettuce" }
 
 # Maria DB 驱动
 

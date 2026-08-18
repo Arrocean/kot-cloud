@@ -126,11 +126,6 @@ open class SecurityProperties {
     open class RedisProperties {
 
         /**
-         * Redis 连接 URI。
-         */
-        var uri: String = "redis://127.0.0.1:6379/0"
-
-        /**
          * Redis Key 前缀。
          */
         var keyPrefix: String = "kot:security"

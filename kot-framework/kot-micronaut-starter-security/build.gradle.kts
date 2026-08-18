@@ -26,7 +26,7 @@ dependencies {
     // Password Hash
     implementation(libs.bcprov.jdk18on)
     implementation(libs.jbcrypt)
-    implementation(libs.lettuce.core)
+    implementation(libs.micronaut.redis.lettuce)
 
     // 注解注入
     implementation(libs.micronaut.runtime)
