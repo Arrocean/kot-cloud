@@ -10,10 +10,12 @@ plugins {
     id("org.graalvm.buildtools.native")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
+    // Micronaut Platform
+    implementation(platform(libs.micronaut.platform))
     // Micronaut Runtime
     implementation(libs.micronaut.runtime)
     // Micronaut HTTP
@@ -35,7 +37,7 @@ dependencies {
     implementation(libs.micronaut.jackson.databind)
 
     /* ============= 基础设施 Starter（关键） ============= */
-    // 选择你的数据库组合：PostgreSQL (包含 md-jdbc-core + driver)
+    // 选择你的数据库组合：PostgreSQL (包含 md-r2dbc-core + R2DBC driver)
     implementation(project(":kot-framework:kot-micronaut-starter-md-postgresql"))
     /* ============= 业务模块 ============= */
     // System 模块
@@ -52,36 +54,24 @@ configurations.configureEach {
 
 ksp {
     arg("micronaut.processing.incremental", "true")
-    arg("micronaut.processing.annotations", "com.whitesprite.dev.*")
+    arg("micronaut.processing.annotations", "com.arrocean.dev.*")
 }
 
 application {
-    mainClass.set("com.whitesprite.dev.server.KotlinServerApplication")
-}
-
-micronaut {
-    // Micronaut Platform 4.10.7
-    version.set("4.10.7")
-    importMicronautPlatform.set(true)
-
-    runtime("netty")
-
-    processing {
-        incremental(true)
-        // 默认使用**
-        annotations("com.whitesprite.dev.**")
-    }
+    mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
 }
 
 graalvmNative {
+    toolchainDetection.set(true)
+
     binaries {
         named("main") {
             imageName.set("kot-server")
-            mainClass.set("com.whitesprite.dev.server.KotlinServerApplication")
+            mainClass.set("com.arrocean.dev.server.KotlinServerApplication")
             buildArgs.addAll(
                 "-J-Xmx${project.property("native.image.xmx")}",
                 "-J-Xms${project.property("native.image.xms")}",
-                "--no-fallback"
+                "-H:+EnableFallbackCompilation"
             )
         }
     }

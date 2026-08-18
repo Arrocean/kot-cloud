@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {

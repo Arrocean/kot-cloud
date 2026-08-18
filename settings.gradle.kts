@@ -16,6 +16,12 @@ include(
 //    ":kot-module-gateway:kot-module-gateway-api",
 //    ":kot-module-gateway:kot-module-gateway-server"
 )
+// Module Member sub-modules
+include(
+    ":kot-module-member",
+//    ":kot-module-member:kot-module-member-api",
+//    ":kot-module-member:kot-module-member-server",
+)
 // Module System sub-modules
 include(
     ":kot-module-system",

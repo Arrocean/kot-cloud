@@ -3,7 +3,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
@@ -16,9 +16,12 @@ dependencies {
 
     // Micronaut Validation
     api(libs.micronaut.validation)
+    ksp(libs.micronaut.validation.processor)
 
     // Micronaut Data
     api(libs.micronaut.data.runtime)
+    api(libs.micronaut.data.r2dbc)
+    api(libs.micronaut.data.tx)
 
     // Micronaut Data Processor
     ksp(libs.micronaut.data.processor)
@@ -37,6 +40,9 @@ dependencies {
     // Micronaut 注解处理器
     ksp(libs.micronaut.inject.kotlin)
 
+    // Micronaut OpenApi
+    ksp(libs.micronaut.openapi)
+    api(libs.micronaut.openapi.annotations)
 
     // system-api 模块
     api(project(":kot-module-system:kot-module-system-api"))

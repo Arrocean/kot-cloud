@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kot-server-config
+data:
+  application-prod.yml: |
+    micronaut:
+      application:
+        name: kot-server
+      server:
+        port: 8080
+    r2dbc:
+      datasources:
+        default:
+          url: r2dbc:pool:postgresql://postgres-service:5432/kot_cloud
+          username: ${DB_USERNAME}
+          password: ${DB_PASSWORD}

@@ -3,7 +3,7 @@ plugins {
 }
 
 version = "0.1"
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 
 dependencies {
 //    api(project(":kot-framework:kot-common-model"))

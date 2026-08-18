@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "com.whitesprite.dev"
+group = "com.arrocean.dev"
 version = "0.0.1"
 
 dependencies {
@@ -11,5 +11,6 @@ dependencies {
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.reactor)
 
+    api(project(":kot-framework:kot-micronaut-starter-security"))
     api(project(":kot-framework:kot-common-model"))
 }

@@ -1,0 +1,81 @@
+name: Build and deploy native image
+
+on:
+#  push:
+#    branches: [master]
+#  pull_request:
+#    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kot-server-native-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy kot-server
+    runs-on: [self-hosted, Linux, X64, NO1]
+    timeout-minutes: 60
+
+    env:
+      DEPLOY_DIR: /home/ubuntu/Kot-Cloud
+      GRADLE_HOME: /home/ubuntu/tools/gradle-9.6.1
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: '25.1'
+          distribution: graalvm
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: gradle
+
+      - name: Verify GraalVM version
+        shell: bash
+        run: |
+          set -euo pipefail
+          native-image --version
+          native-image --version | grep -F "25.1"
+
+      - name: Build native image
+        shell: bash
+        run: |
+          "${GRADLE_HOME}/bin/gradle" --no-daemon \
+          -Pnative.image.xmx=8G \
+          -Pnative.image.xms=512M \
+          :kot-server:nativeCompile
+
+      - name: Deploy native image
+        #if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_file="kot-server/build/native/nativeCompile/kot-server"
+          test -x "${source_file}"
+          install -d "${DEPLOY_DIR}"
+          install -m 0755 "${source_file}" "${DEPLOY_DIR}/kot-server.new"
+          mv -f "${DEPLOY_DIR}/kot-server.new" "${DEPLOY_DIR}/kot-server"
+
+      - name: Upload native image
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kot-server-linux-x64
+          path: kot-server/build/native/nativeCompile/kot-server
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload Native Image error report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-image-error-report
+          path: kot-server/build/native/nativeCompile/svm_err_*.md
+          if-no-files-found: ignore
+          retention-days: 7
