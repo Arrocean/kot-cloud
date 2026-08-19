@@ -19,8 +19,8 @@ include(
 // Module Member sub-modules
 include(
     ":kot-module-member",
-//    ":kot-module-member:kot-module-member-api",
-//    ":kot-module-member:kot-module-member-server",
+    ":kot-module-member:kot-module-member-api",
+    ":kot-module-member:kot-module-member-server",
 )
 // Module System sub-modules
 include(
