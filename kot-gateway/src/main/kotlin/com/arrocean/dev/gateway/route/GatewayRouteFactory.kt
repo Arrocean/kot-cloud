@@ -21,6 +21,7 @@ class GatewayRouteFactory(properties: GatewayProperties) {
                     pathPrefix = it.pathPrefix,
                     targetUri = it.targetUri,
                     stripPrefix = it.stripPrefix,
+                    allowedUserTypes = it.allowedUserTypes.map(String::trim).filter(String::isNotBlank).toSet(),
                 )
             }
     )

@@ -8,6 +8,7 @@ data class GatewayRoute(
     val pathPrefix: String,
     val targetUri: String,
     val stripPrefix: Boolean = false,
+    val allowedUserTypes: Set<String> = emptySet(),
 )
 
 /** 将入站路径解析到下游路由后的结果。 */

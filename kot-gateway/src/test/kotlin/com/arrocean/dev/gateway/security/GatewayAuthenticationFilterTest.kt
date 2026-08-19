@@ -1,6 +1,8 @@
 package com.arrocean.dev.gateway.security
 
 import com.arrocean.dev.gateway.config.GatewayProperties
+import com.arrocean.dev.gateway.route.GatewayRouteFactory
+import com.arrocean.dev.framework.common.enums.CommonUserTypeEnum
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import reactor.core.publisher.Mono
@@ -37,7 +39,7 @@ class GatewayAuthenticationFilterTest {
         val filter = filter()
 
         val response = Mono.from<io.micronaut.http.MutableHttpResponse<*>>(
-            filter.doFilter(HttpRequest.GET<Any>("/admin-api/system/users"), chain())
+            filter.doFilter(HttpRequest.GET<Any>("/v1/admin-api/system/users"), chain())
         ).block()
 
         assertEquals(HttpStatus.UNAUTHORIZED, response?.status)
@@ -48,14 +50,15 @@ class GatewayAuthenticationFilterTest {
         val filter = GatewayAuthenticationFilter(
             properties = GatewayProperties(),
             authenticationService = GatewayAuthenticationService(
-                tokenVerifier = GatewayTokenVerifier { GatewayPrincipal(it, "session-1") },
+                tokenVerifier = GatewayTokenVerifier { GatewayPrincipal(it, "session-1", CommonUserTypeEnum.USER) },
                 sessionValidator = GatewaySessionValidator { throw GatewaySessionUnavailableException(IllegalStateException()) },
             ),
+            gatewayRouteFactory = GatewayRouteFactory(propertiesWithRoutes()),
         )
 
         assertFailsWith<GatewaySessionUnavailableException> {
             Mono.from<io.micronaut.http.MutableHttpResponse<*>>(
-                filter.doFilter(HttpRequest.GET<Any>("/admin-api/system/users").header("Authorization", "Bearer token"), chain())
+                filter.doFilter(HttpRequest.GET<Any>("/v1/admin-api/system/users").header("Authorization", "Bearer token"), chain())
             ).block()
         }
     }
@@ -64,10 +67,76 @@ class GatewayAuthenticationFilterTest {
         return GatewayAuthenticationFilter(
             properties = GatewayProperties(),
             authenticationService = GatewayAuthenticationService(
-                tokenVerifier = GatewayTokenVerifier { GatewayPrincipal(it, "session-1") },
+                tokenVerifier = GatewayTokenVerifier { GatewayPrincipal(it, "session-1", CommonUserTypeEnum.USER) },
                 sessionValidator = GatewaySessionValidator { true },
             ),
+            gatewayRouteFactory = GatewayRouteFactory(propertiesWithRoutes()),
         )
+    }
+
+    @Test
+    fun `rejects a member token at the admin entry point`() {
+        val filter = filter()
+
+        assertFailsWith<GatewayIdentityVerificationException> {
+            Mono.from<io.micronaut.http.MutableHttpResponse<*>>(
+                filter.doFilter(
+                    HttpRequest.GET<Any>("/v1/admin-api/system/users").header("Authorization", "Bearer token"),
+                    chain(),
+                )
+            ).block()
+        }
+    }
+
+    @Test
+    fun `rejects an admin token at the public api entry point`() {
+        val filter = GatewayAuthenticationFilter(
+            properties = propertiesWithRoutes(),
+            authenticationService = GatewayAuthenticationService(
+                tokenVerifier = GatewayTokenVerifier { GatewayPrincipal(it, "session-1", CommonUserTypeEnum.ADMIN) },
+                sessionValidator = GatewaySessionValidator { true },
+            ),
+            gatewayRouteFactory = GatewayRouteFactory(propertiesWithRoutes()),
+        )
+
+        assertFailsWith<GatewayIdentityVerificationException> {
+            Mono.from<io.micronaut.http.MutableHttpResponse<*>>(
+                filter.doFilter(
+                    HttpRequest.GET<Any>("/v1/api/user/me").header("Authorization", "Bearer token"),
+                    chain(),
+                )
+            ).block()
+        }
+    }
+
+    @Test
+    fun `rejects a request outside configured entry points`() {
+        val filter = filter()
+
+        val response = Mono.from<io.micronaut.http.MutableHttpResponse<*>>(
+            filter.doFilter(HttpRequest.GET<Any>("/v1/unknown/resource"), chain())
+        ).block()
+
+        assertEquals(HttpStatus.NOT_FOUND, response?.status)
+    }
+
+    private fun propertiesWithRoutes(): GatewayProperties {
+        return GatewayProperties().apply {
+            routes = listOf(
+                GatewayProperties.RouteProperties().apply {
+                    id = "system"
+                    pathPrefix = "/v1/admin-api/system"
+                    targetUri = "http://system.internal"
+                    allowedUserTypes = listOf(CommonUserTypeEnum.ADMIN.name)
+                },
+                GatewayProperties.RouteProperties().apply {
+                    id = "api"
+                    pathPrefix = "/v1/api"
+                    targetUri = "http://api.internal"
+                    allowedUserTypes = listOf(CommonUserTypeEnum.USER.name)
+                },
+            )
+        }
     }
 
     private fun chain(): io.micronaut.http.filter.ServerFilterChain =

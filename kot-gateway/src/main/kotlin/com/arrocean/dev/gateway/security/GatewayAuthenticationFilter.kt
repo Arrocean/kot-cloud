@@ -1,6 +1,7 @@
 package com.arrocean.dev.gateway.security
 
 import com.arrocean.dev.gateway.config.GatewayProperties
+import com.arrocean.dev.gateway.route.GatewayRouteFactory
 import io.micronaut.http.HttpMethod
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -21,6 +22,7 @@ import reactor.core.publisher.Mono
 class GatewayAuthenticationFilter(
     properties: GatewayProperties,
     private val authenticationService: GatewayAuthenticationService,
+    private val gatewayRouteFactory: GatewayRouteFactory,
 ) : HttpServerFilter {
 
     private val publicPathMatcher = PublicPathMatcher(properties.publicPaths)
@@ -45,9 +47,13 @@ class GatewayAuthenticationFilter(
             return chain.proceed(request)
         }
         return try {
-            authenticationService.authenticate(request.headers.authorization.orElse(null))
+            val route = gatewayRouteFactory.resolver.resolve(request.path)?.route
+                ?: return Mono.just(HttpResponse.notFound<Any>())
+            authenticationService.authenticate(request.headers.authorization.orElse(null), route.allowedUserTypes)
             chain.proceed(request)
         } catch (ex: GatewaySessionUnavailableException) {
+            return Mono.error(ex)
+        } catch (ex: GatewayIdentityVerificationException) {
             return Mono.error(ex)
         } catch (_: GatewayAuthenticationException) {
             Mono.just(HttpResponse.unauthorized<Any>())

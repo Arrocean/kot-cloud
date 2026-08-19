@@ -1,6 +1,7 @@
 package com.arrocean.dev.gateway.security
 
 import com.arrocean.dev.gateway.config.GatewayProperties
+import com.arrocean.dev.framework.common.enums.toCommonUserTypeEnum
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.SignedJWT
@@ -54,7 +55,9 @@ class NimbusGatewayTokenVerifier(
         }
         val sessionId = claims.getStringClaim("sessionId")?.trim()?.takeIf { it.isNotBlank() }
             ?: throw GatewayAuthenticationException("JWT session id is missing")
-        return GatewayPrincipal(token, sessionId)
+        val userType = (claims.getClaim("userType") as? Number)?.toInt()?.toCommonUserTypeEnum()
+            ?: throw GatewayAuthenticationException("JWT user type is missing or invalid")
+        return GatewayPrincipal(token, sessionId, userType)
     }
 
     /**

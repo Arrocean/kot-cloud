@@ -2,6 +2,7 @@ package com.arrocean.dev.gateway.handler
 
 import com.arrocean.dev.framework.common.poko.CommonResult
 import com.arrocean.dev.gateway.security.GatewayAuthenticationException
+import com.arrocean.dev.gateway.security.GatewayIdentityVerificationException
 import com.arrocean.dev.gateway.security.GatewaySessionUnavailableException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.micronaut.http.HttpRequest
@@ -33,6 +34,7 @@ class GatewayExceptionHandler : ExceptionHandler<Throwable, HttpResponse<CommonR
         val (status, code, message) = when {
             exception.hasCause<SocketTimeoutException>() -> Triple(HttpStatus.GATEWAY_TIMEOUT, 504, "下游服务响应超时")
             else -> when (exception) {
+            is GatewayIdentityVerificationException -> Triple(HttpStatus.FORBIDDEN, 403, "身份验证不正确")
             is GatewayAuthenticationException -> Triple(HttpStatus.UNAUTHORIZED, 401, "认证失败")
             is GatewaySessionUnavailableException -> Triple(HttpStatus.SERVICE_UNAVAILABLE, 503, "认证服务暂不可用")
             is HttpClientException -> Triple(HttpStatus.BAD_GATEWAY, 502, "下游服务不可用")

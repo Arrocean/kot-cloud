@@ -1,6 +1,7 @@
 package com.arrocean.dev.gateway.handler
 
 import com.arrocean.dev.gateway.security.GatewayAuthenticationException
+import com.arrocean.dev.gateway.security.GatewayIdentityVerificationException
 import com.arrocean.dev.gateway.security.GatewaySessionUnavailableException
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
@@ -17,6 +18,15 @@ class GatewayExceptionHandlerTest {
     @Test
     fun `maps authentication errors to 401`() {
         assertEquals(HttpStatus.UNAUTHORIZED, handler.handle(request, GatewayAuthenticationException("invalid")).status)
+    }
+
+    @Test
+    fun `maps entry point identity errors to 403`() {
+        val response = handler.handle(request, GatewayIdentityVerificationException("wrong identity"))
+
+        assertEquals(HttpStatus.FORBIDDEN, response.status)
+        assertEquals(403, response.body()?.code)
+        assertEquals("身份验证不正确", response.body()?.msg)
     }
 
     @Test

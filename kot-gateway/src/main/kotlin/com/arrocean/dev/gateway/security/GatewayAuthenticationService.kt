@@ -1,11 +1,13 @@
 package com.arrocean.dev.gateway.security
 
+import com.arrocean.dev.framework.common.enums.CommonUserTypeEnum
 import jakarta.inject.Singleton
 
 /** 已完成 JWT 验签后可用于会话校验的最小认证主体。 */
 data class GatewayPrincipal(
     val token: String,
     val sessionId: String,
+    val userType: CommonUserTypeEnum,
 )
 
 /** Gateway JWT 验签抽象，隔离过滤器与具体 JWT 库。 */
@@ -34,6 +36,9 @@ fun interface GatewaySessionValidator {
 /** 表示 Token 缺失、格式错误、验签失败或会话失效的认证异常。 */
 class GatewayAuthenticationException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
 
+/** 表示 Token 已通过认证，但用户身份与当前 API 接入点不匹配。 */
+class GatewayIdentityVerificationException(message: String) : RuntimeException(message)
+
 /**
  * 协调 Bearer Token 解析、JWT 验签和 Redis 会话校验。
  *
@@ -52,12 +57,15 @@ class GatewayAuthenticationService(
      * @return 已验证的最小认证主体
      * @throws GatewayAuthenticationException 缺少 Token、验签失败或会话已失效时抛出
      */
-    fun authenticate(authorization: String?): GatewayPrincipal {
+    fun authenticate(authorization: String?, allowedUserTypes: Set<String> = emptySet()): GatewayPrincipal {
         val token = BearerTokenReader.extract(authorization)
             ?: throw GatewayAuthenticationException("Missing bearer token")
         val principal = tokenVerifier.verify(token)
         if (!sessionValidator.isActive(principal.sessionId)) {
             throw GatewayAuthenticationException("Session is not active")
+        }
+        if (allowedUserTypes.isNotEmpty() && principal.userType.name !in allowedUserTypes) {
+            throw GatewayIdentityVerificationException("Token user type is not allowed for this entry point")
         }
         return principal
     }

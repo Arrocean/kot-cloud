@@ -23,6 +23,7 @@ open class GatewayProperties {
         var targetUri: String = ""
         var stripPrefix: Boolean = false
         var enabled: Boolean = true
+        var allowedUserTypes: List<String> = emptyList()
     }
 
     /** Redis 会话校验配置。 */

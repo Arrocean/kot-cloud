@@ -33,6 +33,8 @@ dependencies {
     /* ============= 业务模块 ============= */
     // System 模块
     implementation(project(":kot-module-system:kot-module-system-server"))
+    // Member 模块
+    implementation(project(":kot-module-member:kot-module-member-server"))
 }
 
 configurations.configureEach {
